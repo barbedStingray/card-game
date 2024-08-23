@@ -11,7 +11,7 @@ const bucketTree = {
 
 // this is your game board
 const locationTree = {
-  'INPLAY': { 0: [0, 1, 2, 3], 1: [0, 1, 2, 3], 2: [0, 1, 2, 3], 3: [0, 1, 2, 3] },
+  'INPLAY': { 0: [1, 2, 3], 1: [0, 2, 3], 2: [0, 1, 3], 3: [0, 1, 2] },
   'NEIGHBOR': { 0: [1], 1: [0, 2], 2: [1, 3], 3: [2] },
   // OPPONENT
   // OPPOSITE
@@ -43,47 +43,41 @@ function App() {
     console.log('scoring Board')
 
 
-
-
     const boardTotal = boardSlots.reduce((totalScore, dToon, index) => {
       console.log(`SCORING dToon... ${dToon.character}`, dToon)
       const dToonIndex = index
 
-      // find all abilities...
+      // identify all abilities...
       const allBoardAbilities = boardSlots.map((toon) => toon.abilities).flat()
-      console.log('allBoardAbilities', allBoardAbilities)
 
 
-      // find abilities that target this card? 
+      // check abilities and apply bonus
       const additionalPoints = allBoardAbilities.reduce((abilityTotal, ability) => {
+        const { target, targetCategory, condition, conditionCategory, locationCondition, abilityOrigin, oneShot, bonus } = ability
 
-        const { target, targetCategory, condition, conditionCategory, conditionLocation, oneShot, bonus } = ability
-        console.log(target, targetCategory, condition, conditionCategory, conditionLocation, oneShot, bonus)
+        //! Need to account for two conditionCategories
+        //! Maybe adjust logic so that not every ability gets checked by every card? 
+        // ! filter abilities, filter abilites that are successful, go over dToons and match by target?
+        const abilityOriginIndex = boardSlots.map((toon) => toon.character).indexOf(abilityOrigin)
 
+        const identifyConditionIndices = locationTree[locationCondition]?.[abilityOriginIndex]
+        const identifyConditionAttributes = identifyConditionIndices.map((x) => boardSlots[x][conditionCategory])
+        console.log('identifyConditionAttributes', identifyConditionAttributes)
 
-        // ! Designate location ability is assessing
-        const targetLocations = locationTree[conditionLocation]?.[index]
-        console.log('targetLocations', targetLocations)
-        const targetCards = boardSlots.map((toon) => toon.color)
-        console.log('colorCardsInPlay', targetCards)
+        const countMatches = identifyConditionAttributes.filter((potentialMatch) => condition.includes(potentialMatch))
+        console.log('countMatches', countMatches)
+        const isConditionSatisfied = countMatches.length > 0
+        console.log('isConditionSatisfied', isConditionSatisfied)
 
-
-        const countMatches = targetCards.filter((color) => color === condition)
-        console.log('count Matches ', countMatches)
-        
-        const isColorMatchSatisfied = countMatches.length > 0
-        console.log('isLocationSatisfied', isColorMatchSatisfied)
-        
-        // ! what is the target of the ability?
+        console.log(`Checking For ${target} in ${targetCategory} with dToon ${dToon[targetCategory]}`)
         const isTargetSatisfied = target.includes(dToon[targetCategory])
-        console.log('isTargetSatisfied', isTargetSatisfied)
 
-        // apply bonus
-        if (isTargetSatisfied && isColorMatchSatisfied) {
-          return (ability.oneShot ? bonus : bonus * countMatches.length) + abilityTotal
+        if (isTargetSatisfied && isConditionSatisfied) {
+          return (oneShot ? bonus : bonus * countMatches.length) + abilityTotal
         }
         return abilityTotal
       }, 0)
+
       console.log(`${dToon.character} addtionalPoints`, additionalPoints)
 
 
@@ -99,6 +93,7 @@ function App() {
     setBoardScore(boardTotal)
   }
 
+  
 
 
 
