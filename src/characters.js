@@ -1,25 +1,37 @@
+// RULE - A card may not have an ability that immediately rewards itself upon playing...
+// ex: Elsa, Blue - +3 to each Blue card in play...
+
 const dToons = [
     {
         id: 0,
         character: 'Elsa',
-        color: 'Blue',
+        color: 'Silver',
         points: 3,
-        groups: ['Queen'],
+        groups: [],
         abilities: [
             {
-                ability: '+2 for each Pink or White card in play',
-                target: ['Elsa'], // card receiving the bonus
-                targetCategory: ['character'], // category matching how the bonus is received
+                ability: '+3 for each Anna any color or Blue Kristoff in play',
+                // will probably need a type to split board scoring vs board rearranging...
+                
+                abilityOrigin: 'Elsa', // origin position of the ability - determines neighbors / locations... 
+                
+                targets: {
+                    character: ['Elsa'],
+                },
+                targetMatch: 'every', // some-  can match some of the keys in target, or ALL
+                // targetLocation needed to assess that the dToon is in the correct spot
+                targetLocation: 'SELF', // ! is there a time the target location would be different from the conditionLocation?
+                // Logic bypasses an undefined state where location wouldnt matter because the target is already selected "Elsa..."
+                
+                conditions: { // represents both conditionCategories and conditions
+                    character: ['Anna', 'Kristoff'],
+                    color: ['Blue'],
+                },
+                conditionMatch: 'every', // or every // this means it can match some of the conditionCategories, or ALL
+                conditionLocation: 'INPLAY', // location check for conditions - Does this need to be an array?
 
-                condition: [['Pink', 'White']], // conditions met to activate the bonus
-                conditionCategory: ['color'], // category for the condition - do I need this? 
-                locationCondition: ['INPLAY'], // location to check for conditions
-                // NEW NEW NEW 
-                matchType: 'some', // or every // this means it can match some of the conditionCategories, or ALL
-
-                abilityOrigin: 'Elsa', // location of the ability - determines neighbors / locations... 
                 oneShot: false, // how many times the bonus should be applied
-                bonus: 2,
+                bonus: 3,
             },
         ],
         displayImage: 'displayImage simpleImage gameImage',
@@ -27,23 +39,10 @@ const dToons = [
     {
         id: 1,
         character: 'Anna',
-        color: 'Pink',
-        points: 7,
-        groups: [],
+        color: 'White',
+        points: 8,
+        groups: ['Queen'],
         abilities: [
-            // {
-            //     ability: '+1 if next to any Kristoff',
-            //     target: ['Anna'], // card receiving the bonus
-            //     targetCategory: ['character'], // category matching how the bonus is received
-
-            //     condition: ['Kristoff'], // conditions met to activate the bonus
-            //     conditionCategory: ['character'], // category for the condition - do I need this? 
-            //     locationCondition: ['NEIGHBOR'], // location to check for conditions
-
-            //     abilityOrigin: 'Anna', // location of the ability - determines neighbors / locations... 
-            //     oneShot: true, // how many times the bonus should be applied
-            //     bonus: 1,
-            // },
         ],
         displayImage: 'displayImage simpleImage gameImage',
     },
@@ -51,54 +50,19 @@ const dToons = [
         id: 2,
         character: 'Olaf',
         color: 'Blue',
-        points: 3,
+        points: 7,
         groups: [],
         abilities: [
-            // {
-            //     ability: '+5 if any Black card is in play',
-            //     target: ['Olaf'], // card receiving the bonus
-            //     targetCategory: ['character'], // category matching how the bonus is received
-
-            //     condition: ['Black'], // conditions met to activate the bonus
-            //     conditionCategory: ['color'], // category for the condition - do I need this? 
-            //     locationCondition: ['INPLAY'], // location to check for conditions
-
-            //     abilityOrigin: 'Olaf', // location of the ability - determines neighbors / locations... 
-            //     oneShot: true, // how many times the bonus should be applied
-            //     bonus: 5,
-            // },
         ],
         displayImage: 'displayImage simpleImage gameImage',
     },
     {
         id: 3,
         character: 'Kristoff',
-        color: 'White',
-        points: 5,
+        color: 'Blue',
+        points: 6,
         groups: [],
         abilities: [
-            {
-                ability: '+3 if any Blue 3 is in play',
-                target: ['Kristoff'], // card receiving the bonus
-                targetCategory: ['character'], // category matching how the bonus is received
-
-                condition: ['Blue', 3], // conditions met to activate the bonus
-                conditionCategory: ['color', 'points'], // category for the condition - do I need this? 
-                locationCondition: ['INPLAY'], // location to check for conditions
-
-                abilityOrigin: 'Kristoff', // location of the ability - determines neighbors / locations... 
-                oneShot: false, // how many times the bonus should be applied
-                bonus: 3,
-            },
-            // {
-            //     ability: 'No Ability',
-            //     target: null,
-            //     targetCategory: null,
-            //     condition: null,
-            //     conditionCategory: null,
-            //     conditionLocation: null,
-            //     bonus: null,
-            // },
         ],
         displayImage: 'displayImage simpleImage gameImage',
     },

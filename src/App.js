@@ -45,83 +45,100 @@ function App() {
   function scoreTheBoard(boardSlots) {
     console.log('scoring Board')
 
-
     // identify all abilities... only need to do it once...
     const allBoardAbilities = boardSlots.map((toon) => toon.abilities).flat()
 
-    // todo INITIAL Reduce, each dToon one by one
+    // ! INITIAL Reduce, each dToon one by one
     const boardTotal = boardSlots.reduce((totalScore, dToon, index) => {
       console.log(`SCORING dToon... ${dToon.character}`, dToon)
       const dToonIndex = index
+      console.log('dToonIndex', dToonIndex)
 
-      // check abilities and apply bonus
-      // todo loop through each ability in play (this is inside each dToon)
+      // ! loop through each ability in play (this is inside each dToon)
       const additionalPoints = allBoardAbilities.reduce((abilityTotal, ability) => {
-        const { target, targetCategory, condition, conditionCategory, locationCondition, abilityOrigin, oneShot, bonus } = ability
+
+        const { targets, targetMatch, targetLocation, abilityOrigin } = ability
         console.log('ABILITY', ability.ability)
 
-        // check if this card is a valid target of the ability
-        console.log(`Checking For ${target} in ${targetCategory} with dToon ${dToon[targetCategory]}`)
-        const isTargetSatisfied = target.includes(dToon[targetCategory])
-        console.log('isTarget satisfied?', isTargetSatisfied)
+        const abilityOriginIndex = boardSlots.map((toon) => toon.character).indexOf(abilityOrigin)
+        console.log('abilityOriginIndex', abilityOriginIndex)
 
+        console.log('targetLocation', targetLocation)
+        const identifyTargetLocations = targetLocation === 'SELF' ? [abilityOriginIndex] : locationTree[targetLocation]?.[abilityOriginIndex]
+        console.log('identifyTargetLocations', identifyTargetLocations)
+
+        // is this dToon in a target Location? 
+        const targetIsInLocation = identifyTargetLocations.includes(dToonIndex)
+        console.log('targetIsInLocation', targetIsInLocation)
+
+        if (!targetIsInLocation) {
+          console.log(dToon.character, 'is not in Target Location', ability.ability)
+          return abilityTotal
+        }
+
+        const targetCategories = Object.keys(targets)
+        console.log('targetCategories', targetCategories)
+        
+        const isTargetSatisfied = targetCategories[targetMatch]((category) => {
+          console.log('category', category)
+          console.log('target[category]', targets[category])
+          console.log('dToon[category]', dToon[category])
+          console.log('return', targets[category].includes(dToon[category]))
+          return targets[category].includes(dToon[category])
+        })
+        console.log('isTarget satisfied?', isTargetSatisfied)
+        
         if (!isTargetSatisfied) {
           console.log(dToon.character, 'is not a target of', ability.ability)
           return abilityTotal
         }
+        
+        // ! ---------- CONSTRUCTION -------------- 
+        // ! ---------- CONSTRUCTION --------------
 
-        // check if the ability conditions are met
-        const abilityOriginIndex = boardSlots.map((toon) => toon.character).indexOf(abilityOrigin)
-        // console.log('abilityOriginIndex', abilityOriginIndex)
-        const identifyConditionIndices = locationTree[locationCondition]?.[abilityOriginIndex]
+        // ! check if the ability conditions are met
+        const { conditions, conditionLocation, conditionMatch } = ability
 
-        // ! ---------- CONSTRUCTION -------------- THIS IS BEFORE
+        const identifyConditionIndices = locationTree[conditionLocation]?.[abilityOriginIndex]
+        console.log('identifyConditionIndices', identifyConditionIndices)
+
 
         const isConditionSatisfiedBySameCard = identifyConditionIndices.map((position) => {
           console.log('position', position)
 
-          return conditionCategory.every((condCat, i) => { // todo every conditionCategory must be true, or only some? I will need both... 
-            console.log('condCat', condCat, i)
+          const categories = Object.keys(conditions)
+          console.log('categories', categories)
 
-            // const theCondition = condition[i]
-            const conditionValues = Array.isArray(condition[i]) ? condition[i] : [condition[i]]; // todo is this actually needed?
+          return categories[conditionMatch]((conditionCategory) => {
+            console.log('conditionCategory', conditionCategory)
 
+            const conditionValues = Array.isArray(conditions[conditionCategory]) ? conditions[conditionCategory] : [conditions[conditionCategory]]; // todo is this actually needed? This will always be an array?? 
             console.log('conditionValues', conditionValues)
-            console.log('Character Att:', boardSlots[position][condCat])
-            console.log('return', conditionValues.includes(boardSlots[position][condCat]))
-            // return boardSlots[position][condCat] === conditionValues
-            return conditionValues.includes(boardSlots[position][condCat])
+
+            console.log('Character Att:', boardSlots[position][conditionCategory])
+            console.log('return', conditionValues.includes(boardSlots[position][conditionCategory]))
+            return conditionValues.includes(boardSlots[position][conditionCategory])
           })
         })
         console.log('isConditionSatisfiedBySameCard', isConditionSatisfiedBySameCard)
         const countSatisfaction = isConditionSatisfiedBySameCard.filter(Boolean).length
         console.log('countSatisfaction', countSatisfaction)
-
-        // ! ---------- CONSTRUCTION --------------
-
-        const identifyConditionAttributes = identifyConditionIndices.map((x) => boardSlots[x][conditionCategory])
-        // console.log('identifyConditionAttributes', identifyConditionAttributes)
-        const countMatches = identifyConditionAttributes.filter((potentialMatch) => condition.includes(potentialMatch))
-        // console.log('countMatches', countMatches)
-        const isConditionSatisfied = countMatches.length > 0
-        // console.log('isConditionSatisfied', isConditionSatisfied)
-
+        const isConditionSatisfied = countSatisfaction > 0
+        console.log('isConditionSatisfied', isConditionSatisfied)
 
         if (!isConditionSatisfied) {
           console.log(ability.ability, 'condition not met')
           return abilityTotal
         }
 
-        // console.log('oneShot, length', oneShot, countMatches.length)
-        return (oneShot ? bonus : bonus * countMatches.length) + abilityTotal
+        const { oneShot, bonus } = ability
+        return (oneShot ? bonus : bonus * countSatisfaction) + abilityTotal
       }, 0)
 
-      // console.log(`${dToon.character} addtionalPoints`, additionalPoints)
-
-      // console.log(`${dToonIndex}-${dToon.character} pointValue: ${dToon.points} extra: ${additionalPoints}`)
+      console.log(`${dToon.character} addtionalPoints`, additionalPoints)
+      console.log(`${dToonIndex}-${dToon.character} pointValue: ${dToon.points} extra: ${additionalPoints}`)
       return totalScore + dToon.points + additionalPoints
     }, 0)
-
 
     setBoardScore(boardTotal)
   }
