@@ -13,30 +13,40 @@ const dToons = [
         groups: [],
         abilities: [
             {
-                ability: 'x3 for each neighboring Blue card',
+                ability: '-5 to opposing black card',
                 // todo will probably need a type to split board scoring vs board rearranging...
                 abilityOrigin: 'Elsa', // origin position of the ability - determines neighbors / locations... 
                 
                 targets: { // not every target needs a condition. Targets are free.
-                    character: ['Elsa'],
+                    color: ['Black'],
                 },
                 targetMatch: 'every',
-                targetLocation: 'SELF',
+                targetLocation: 'OPPOSITE',
                 
                 conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
-                    color: ['Blue'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
+                    color: ['Black'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
                 },
                 conditionMatch: 'every', // or every // this means it can match some of the conditionCategories, or ALL
-                conditionLocation: 'NEIGHBOR', // location check for conditions - Does this need to be an array?
+                conditionLocation: 'OPPOSITE', // location check for conditions - Does this need to be an array?
 
-                oneShot: false, // how many times the bonus should be applied
-                bonus: '2x', // 1x doubles... 2x triples... 
+                oneShot: true, // how many times the bonus should be applied
+                bonus: '-5', // 1x doubles... 2x triples... 
             },
         ],
         displayImage: 'displayImage simpleImage gameImage',
     },
     {
         id: 1,
+        character: 'Maleficent',
+        color: 'Black',
+        points: 10,
+        groups: [],
+        abilities: [
+        ],
+        displayImage: 'displayImage simpleImage gameImage',
+    },
+    {
+        id: 2,
         character: 'Anna',
         color: 'Blue',
         points: 8,
@@ -46,7 +56,17 @@ const dToons = [
         displayImage: 'displayImage simpleImage gameImage',
     },
     {
-        id: 2,
+        id: 3,
+        character: 'Jafar',
+        color: 'Black',
+        points: 10,
+        groups: [],
+        abilities: [
+        ],
+        displayImage: 'displayImage simpleImage gameImage',
+    },
+    {
+        id: 4,
         character: 'Olaf',
         color: 'Silver',
         points: 4,
@@ -56,11 +76,31 @@ const dToons = [
         displayImage: 'displayImage simpleImage gameImage',
     },
     {
-        id: 3,
+        id: 5,
+        character: 'Ursula',
+        color: 'Black',
+        points: 10,
+        groups: [],
+        abilities: [
+        ],
+        displayImage: 'displayImage simpleImage gameImage',
+    },
+    {
+        id: 6,
         character: 'Kristoff',
         color: 'Blue',
-        points: 6,
+        points: 5,
         groups: ['Music', 'Princess'],
+        abilities: [
+        ],
+        displayImage: 'displayImage simpleImage gameImage',
+    },
+    {
+        id: 7,
+        character: 'Gaston',
+        color: 'Black',
+        points: 10,
+        groups: [],
         abilities: [
         ],
         displayImage: 'displayImage simpleImage gameImage',

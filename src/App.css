@@ -5,10 +5,22 @@
 }
 
 .App {
+  /* border: 2px solid green; */
   width: 100vw;
   height: 100vh;
   display: flex;
+  flex-flow: column nowrap;
+}
+
+.logistics {
+  display: flex;
+}
+
+.gameBoard {
+  /* border: 2px solid magenta; */
+  display: flex;
   flex-flow: row nowrap;
+  height: 60vh;
 }
 
 .gameside {
