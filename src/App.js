@@ -11,7 +11,7 @@ const bucketTree = {
 
 // this is your game board
 const locationTree = {
-  'SELF': { 0: [0], 1: [1], 2: [2], 3: [3] },
+  'SELF': { 0: [0], 1: [1], 2: [2], 3: [3], 4: [4], 5: [5], 6: [6], 7: [7], 8: [8], 9: [9], 10: [10], 11: [11], 12: [12], 13: [13], },
   'INPLAY': { 0: [1, 2, 3], 1: [0, 2, 3], 2: [0, 1, 3], 3: [0, 1, 2] },
   'NEIGHBOR': { 0: [1], 1: [0, 2], 2: [1, 3], 3: [2] },
   // OPPONENT
@@ -48,34 +48,35 @@ function App() {
     // identify all abilities... only need to do it once...
     const allBoardAbilities = boardSlots.map((toon) => toon.abilities).flat()
 
-    // ! INITIAL Reduce, each dToon one by one
+    // ! INITIAL Reduce, each dToon one by one // do I want to reduce? or do I want an array of points? 
     const boardTotal = boardSlots.reduce((totalScore, dToon, index) => {
       console.log(`SCORING dToon... ${dToon.character}`, dToon)
       const dToonIndex = index
 
       // ! loop through each ability in play (this is inside each dToon)
       const additionalPoints = allBoardAbilities.reduce((abilityTotal, ability) => {
-
-        const { targets, targetMatch, targetLocation, abilityOrigin } = ability
-        console.log('ABILITY', ability.ability)
-        const abilityOriginIndex = boardSlots.map((toon) => toon.character).indexOf(abilityOrigin)
-
+        console.log('looping through Abilities:', ability.ability)
+        
         // ! Check if dToon is inside target location
+        const { targetLocation, abilityOrigin } = ability
+        const abilityOriginIndex = boardSlots.map((toon) => toon.character).indexOf(abilityOrigin)
         const isTargetInLocation = locationTree[targetLocation][abilityOriginIndex].includes(dToonIndex)
+
         if (!isTargetInLocation) {
           console.log(dToon.character, 'is not in Target Location', ability.ability)
           return abilityTotal
         }
 
         // ! check if dToon meets target satisfaction (target conditions)
+        const { targets, targetMatch } = ability
         const targetCategories = Object.keys(targets)
-        console.log('targetCategories', targetCategories)
 
         const isTargetSatisfied = targetCategories.length === 0 || targetCategories[targetMatch]((category) => {
-          console.log(dToon[category]) // todo groups will be an array...
-          // you're comparing an array to an array... XxX
-          console.log('return', targets[category].includes(dToon[category])) // todo possible many : many for groups
-          return targets[category].includes(dToon[category])
+          const targetValues = bucketTree[targets[category]] || targets[category]
+          const dToonCategoryValues = Array.isArray(dToon[category]) ? dToon[category] : [dToon[category]]
+          console.log('targetValues', targetValues)
+          console.log('dToonCategory', dToonCategoryValues)
+          return dToonCategoryValues.some((toonValue) => targetValues.includes(toonValue))
         })
         console.log('isTarget satisfied?', isTargetSatisfied)
 
@@ -83,7 +84,7 @@ function App() {
           console.log(dToon.character, 'is not a target of', ability.ability)
           return abilityTotal
         }
-        
+
         // ! check if the ability conditions are met
         const { conditions, conditionLocation, conditionMatch } = ability
 
@@ -91,22 +92,23 @@ function App() {
         console.log('identifyConditionIndices', identifyConditionIndices)
 
         const isConditionSatisfiedBySameCard = identifyConditionIndices.map((position) => {
-          console.log('position', position)
-
           const categories = Object.keys(conditions)
-          console.log('categories', categories)
+          console.log('position', position, 'total categories:', categories)
 
           return categories[conditionMatch]((conditionCategory) => {
-            console.log('conditionCategory', conditionCategory)
-
-            const conditionValues = Array.isArray(conditions[conditionCategory]) ? conditions[conditionCategory] : [conditions[conditionCategory]]; // todo is this actually needed? This will always be an array?? 
+            const conditionValues = bucketTree[conditions[conditionCategory]] || conditions[conditionCategory]
+            const characterAtt = boardSlots[position][conditionCategory]
+            const characterAttributes = Array.isArray(characterAtt) ? characterAtt : [characterAtt]
             console.log('conditionValues', conditionValues)
-
-            console.log('Character Att:', boardSlots[position][conditionCategory])
-            console.log('return', conditionValues.includes(boardSlots[position][conditionCategory]))
-            return conditionValues.includes(boardSlots[position][conditionCategory])
+            console.log('characterAttributes', characterAttributes)
+            const isConditionTrue = characterAttributes.some((attribute) => {
+              return conditionValues.includes(attribute)
+            })
+            console.log('isConditionTrue', isConditionTrue)
+            return isConditionTrue
           })
         })
+
         console.log('isConditionSatisfiedBySameCard', isConditionSatisfiedBySameCard)
         const countSatisfaction = isConditionSatisfiedBySameCard.filter(Boolean).length
         console.log('countSatisfaction', countSatisfaction)
@@ -118,8 +120,11 @@ function App() {
           return abilityTotal
         }
 
+        // ! Checks all passed, apply bonus
         const { oneShot, bonus } = ability
-        return (oneShot ? bonus : bonus * countSatisfaction) + abilityTotal
+        const isMultiplier = bonus.split('').some((letter) => letter === 'x')
+        const newBonus = isMultiplier ? dToon.points * bonus[0] : Number(bonus)
+        return (oneShot ? newBonus : newBonus * countSatisfaction) + abilityTotal
       }, 0)
 
       console.log(`${dToon.character} addtionalPoints`, additionalPoints)
