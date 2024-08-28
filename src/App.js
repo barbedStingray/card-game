@@ -11,6 +11,7 @@ const bucketTree = {
 
 // this is your game board
 const locationTree = {
+  'SELF': { 0: [0], 1: [1], 2: [2], 3: [3] },
   'INPLAY': { 0: [1, 2, 3], 1: [0, 2, 3], 2: [0, 1, 3], 3: [0, 1, 2] },
   'NEIGHBOR': { 0: [1], 1: [0, 2], 2: [1, 3], 3: [2] },
   // OPPONENT
@@ -41,7 +42,6 @@ function App() {
 
 
 
-
   function scoreTheBoard(boardSlots) {
     console.log('scoring Board')
 
@@ -52,56 +52,43 @@ function App() {
     const boardTotal = boardSlots.reduce((totalScore, dToon, index) => {
       console.log(`SCORING dToon... ${dToon.character}`, dToon)
       const dToonIndex = index
-      console.log('dToonIndex', dToonIndex)
 
       // ! loop through each ability in play (this is inside each dToon)
       const additionalPoints = allBoardAbilities.reduce((abilityTotal, ability) => {
 
         const { targets, targetMatch, targetLocation, abilityOrigin } = ability
         console.log('ABILITY', ability.ability)
-
         const abilityOriginIndex = boardSlots.map((toon) => toon.character).indexOf(abilityOrigin)
-        console.log('abilityOriginIndex', abilityOriginIndex)
 
-        console.log('targetLocation', targetLocation)
-        const identifyTargetLocations = targetLocation === 'SELF' ? [abilityOriginIndex] : locationTree[targetLocation]?.[abilityOriginIndex]
-        console.log('identifyTargetLocations', identifyTargetLocations)
-
-        // is this dToon in a target Location? 
-        const targetIsInLocation = identifyTargetLocations.includes(dToonIndex)
-        console.log('targetIsInLocation', targetIsInLocation)
-
-        if (!targetIsInLocation) {
+        // ! Check if dToon is inside target location
+        const isTargetInLocation = locationTree[targetLocation][abilityOriginIndex].includes(dToonIndex)
+        if (!isTargetInLocation) {
           console.log(dToon.character, 'is not in Target Location', ability.ability)
           return abilityTotal
         }
 
+        // ! check if dToon meets target satisfaction (target conditions)
         const targetCategories = Object.keys(targets)
         console.log('targetCategories', targetCategories)
-        
-        const isTargetSatisfied = targetCategories[targetMatch]((category) => {
-          console.log('category', category)
-          console.log('target[category]', targets[category])
-          console.log('dToon[category]', dToon[category])
-          console.log('return', targets[category].includes(dToon[category]))
+
+        const isTargetSatisfied = targetCategories.length === 0 || targetCategories[targetMatch]((category) => {
+          console.log(dToon[category]) // todo groups will be an array...
+          // you're comparing an array to an array... XxX
+          console.log('return', targets[category].includes(dToon[category])) // todo possible many : many for groups
           return targets[category].includes(dToon[category])
         })
         console.log('isTarget satisfied?', isTargetSatisfied)
-        
+
         if (!isTargetSatisfied) {
           console.log(dToon.character, 'is not a target of', ability.ability)
           return abilityTotal
         }
         
-        // ! ---------- CONSTRUCTION -------------- 
-        // ! ---------- CONSTRUCTION --------------
-
         // ! check if the ability conditions are met
         const { conditions, conditionLocation, conditionMatch } = ability
 
         const identifyConditionIndices = locationTree[conditionLocation]?.[abilityOriginIndex]
         console.log('identifyConditionIndices', identifyConditionIndices)
-
 
         const isConditionSatisfiedBySameCard = identifyConditionIndices.map((position) => {
           console.log('position', position)

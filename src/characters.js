@@ -1,6 +1,9 @@
 // RULE - A card may not have an ability that immediately rewards itself upon playing...
 // ex: Elsa, Blue - +3 to each Blue card in play...
 
+// ? cant write an ability that targets the same attribute twice ?
+// two groups that equate to EVERY might be tough...? 
+
 const dToons = [
     {
         id: 0,
@@ -10,27 +13,23 @@ const dToons = [
         groups: [],
         abilities: [
             {
-                ability: '+3 for each Anna any color or Blue Kristoff in play',
-                // will probably need a type to split board scoring vs board rearranging...
-                
+                ability: '+3 if any Queen is in play',
+                // todo will probably need a type to split board scoring vs board rearranging...
                 abilityOrigin: 'Elsa', // origin position of the ability - determines neighbors / locations... 
                 
                 targets: {
-                    character: ['Elsa'],
+                    character: ['Elsa'], // irrelevant when target is self...
                 },
                 targetMatch: 'every', // some-  can match some of the keys in target, or ALL
-                // targetLocation needed to assess that the dToon is in the correct spot
-                targetLocation: 'SELF', // ! is there a time the target location would be different from the conditionLocation?
-                // Logic bypasses an undefined state where location wouldnt matter because the target is already selected "Elsa..."
+                targetLocation: 'SELF',
                 
                 conditions: { // represents both conditionCategories and conditions
-                    character: ['Anna', 'Kristoff'],
-                    color: ['Blue'],
+                    groups: ['Queen'],
                 },
                 conditionMatch: 'every', // or every // this means it can match some of the conditionCategories, or ALL
                 conditionLocation: 'INPLAY', // location check for conditions - Does this need to be an array?
 
-                oneShot: false, // how many times the bonus should be applied
+                oneShot: true, // how many times the bonus should be applied
                 bonus: 3,
             },
         ],
@@ -41,7 +40,7 @@ const dToons = [
         character: 'Anna',
         color: 'White',
         points: 8,
-        groups: ['Queen'],
+        groups: 'Queen',
         abilities: [
         ],
         displayImage: 'displayImage simpleImage gameImage',
