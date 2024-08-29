@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import './App.css'
 import dToons from './characters.js'
+
 import scoreTheBoard from './utilities/scoreTheBoard.js'
 import locationTree from './utilities/locationTree.js'
 
@@ -31,11 +32,13 @@ function App() {
     console.log('begin Scoring Round')
 
     // ! settle Score of the board
-    // ? This will likely need to be the array of scores...
-    const entireBoardScore = scoreTheBoard(boardSlots) // evaluates to an array of scores
-    const myToonScore = 0 // This has to be the sum of all the even positions
-    const opponentScore = 0 // This has to be the sum of all the odd positions
+    // todo This will likely need to be the array of scores...
+    const entireBoardScore = scoreTheBoard(boardSlots)
 
+    // const newMyToonScore = entireBoardScore.reduce((sum, x, i) => { return i % 2 === 0 ? sum + x : sum }, 0) // This has to be the sum of all the even positions
+    // const newOpponentScore = entireBoardScore.reduce((sum, x, i) => i % 2 !== 0 ? sum + x : sum, 0) // This has to be the sum of all the odd positions
+    // setMyToonScore(newMyToonScore)
+    // setOpponentScore(newOpponentScore)
     setBoardScore(entireBoardScore)
   }
 
@@ -43,31 +46,49 @@ function App() {
 
   function shuffleBoardRound(boardSlots) {
     console.log('shuffling board', boardSlots)
-    // ! settle board adjustments
 
-    const allBoardAbilities = boardSlots.map((toon) => toon.abilities).flat().filter((ability) => ability.abilityType === 'BOARD')
+    // abilities that have yet to be used
+    const allBoardAbilities = boardSlots.map((toon) => toon.abilities).flat().filter((ability) => ability.abilityType === 'BOARD' && ability.beenUsed === false)
     console.log('allBoardAbilities', allBoardAbilities)
     
-    // what do I want? To swap places... take an array, return a different array.
-    // I need the index of the two items to be swapped... two index numbers
-
-    // lets generate an array of the index pairs that need to swap.
     const swapIndexPairs = allBoardAbilities.map((ability) => {
-      const abilityOriginIndex = locationTree
+      const abilityOriginIndex = boardSlots.map((toon) => toon.character).indexOf(ability.abilityOrigin)
+      const targetIndex = locationTree[ability.targetLocation][abilityOriginIndex]
+      const swapTargetIndex = locationTree[ability.swapTargetLocation][abilityOriginIndex]
+      const swapIndexes = [targetIndex, swapTargetIndex].flat()
       console.log(ability.ability)
       console.log('ability.targetLocation', ability.targetLocation)
+
+      // mark ability as used
+      ability.beenUsed = true
+
+      return swapIndexes
     })
     console.log('swapIndexPairs', swapIndexPairs)
 
-
-    function swapPlaces(boardSlots, swapOne, swapTwo) {
-      // function to swap two places in board slots... 
+    function swapPlaces(boardSlots, swapTargets) {
+      console.log('swappingPlaces', boardSlots, swapTargets)
+      const newBoardSlots = [...boardSlots]
+      swapTargets.forEach((targetPair) => {
+        const [firstIndex, secondIndex] = targetPair
+        const firstToon = newBoardSlots[firstIndex]
+        const secondToon = newBoardSlots[secondIndex]
+        console.log('firstToon', firstToon)
+        console.log('secondToon', secondToon)
+        newBoardSlots[targetPair[0]] = secondToon
+        newBoardSlots[targetPair[1]] = firstToon
+        console.log(newBoardSlots)
+      })
+      return newBoardSlots
     }
 
+    const afterSwapSpots = swapPlaces(boardSlots, swapIndexPairs)
+    console.log('afterSwapSpots', afterSwapSpots)
 
 
-
-
+    setBoardSlots(afterSwapSpots)
+    setMyToons(afterSwapSpots.filter((_, i) => i % 2 === 0))
+    setOpponentToons(afterSwapSpots.filter((_, i) => i % 2 !== 0))
   }
 
 
@@ -106,8 +127,8 @@ function App() {
       </div>
 
       <div className='logistics'>
-        <button onClick={() => shuffleBoardRound(boardSlots)}>Shuffle</button>
-        <button onClick={() => beginScoringRound(boardSlots)}>Score</button>
+        <button onClick={() => shuffleBoardRound(boardSlots)}>BOARD</button>
+        <button onClick={() => beginScoringRound(boardSlots)}>SCORE</button>
         <p>Total</p>
         <h1>{boardScore}</h1>
         <p>My Score</p>

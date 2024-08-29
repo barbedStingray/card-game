@@ -78,6 +78,7 @@ const dToons = [
                 abilityOrigin: 'Olaf', 
                 
                 boardSet: 'SWAP',
+                beenUsed: false,
 
                 targets: {
                     character: ['Olaf'],

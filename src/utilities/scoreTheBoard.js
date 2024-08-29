@@ -14,9 +14,9 @@ export default function scoreTheBoard(boardSlots) {
     console.log('scoring Board')
 
     // identify all abilities... only need to do it once...
-    const boardScoringAbilities = boardSlots.map((toon) => toon.abilities).flat()
+    const allScoringAbilities = boardSlots.map((toon) => toon.abilities).flat()
         .filter((ability) => ability.abilityType === 'SCORE')
-    console.log('allBoardAbilities', boardScoringAbilities)
+    console.log('allScoringAbilities', allScoringAbilities)
 
     // ! INITIAL Reduce, each dToon one by one // do I want to reduce? or do I want an array of points? 
     const boardTotal = boardSlots.reduce((totalScore, dToon, index) => {
@@ -24,7 +24,7 @@ export default function scoreTheBoard(boardSlots) {
         const dToonIndex = index
 
         // ! loop through each ability in play (this is inside each dToon)
-        const additionalPoints = boardScoringAbilities.reduce((abilityTotal, ability) => {
+        const additionalPoints = allScoringAbilities.reduce((abilityTotal, ability) => {
             // console.log('looping through Abilities:', ability.ability)
 
             // ! Check if dToon is inside target location
