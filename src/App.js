@@ -2,11 +2,9 @@ import React, { useState } from 'react'
 import './App.css'
 import dToons from './characters.js'
 import scoreTheBoard from './utilities/scoreTheBoard.js'
-
-
+import locationTree from './utilities/locationTree.js'
 
 function App() {
-
 
   const [boardSlots, setBoardSlots] = useState(dToons)
   const [boardScore, setBoardScore] = useState(0)
@@ -27,10 +25,10 @@ function App() {
   //   }
   // }
 
+
+
   function beginScoringRound(boardSlots) {
     console.log('begin Scoring Round')
-
-    // ! settle board adjustments
 
     // ! settle Score of the board
     // ? This will likely need to be the array of scores...
@@ -40,6 +38,38 @@ function App() {
 
     setBoardScore(entireBoardScore)
   }
+
+
+
+  function shuffleBoardRound(boardSlots) {
+    console.log('shuffling board', boardSlots)
+    // ! settle board adjustments
+
+    const allBoardAbilities = boardSlots.map((toon) => toon.abilities).flat().filter((ability) => ability.abilityType === 'BOARD')
+    console.log('allBoardAbilities', allBoardAbilities)
+    
+    // what do I want? To swap places... take an array, return a different array.
+    // I need the index of the two items to be swapped... two index numbers
+
+    // lets generate an array of the index pairs that need to swap.
+    const swapIndexPairs = allBoardAbilities.map((ability) => {
+      const abilityOriginIndex = locationTree
+      console.log(ability.ability)
+      console.log('ability.targetLocation', ability.targetLocation)
+    })
+    console.log('swapIndexPairs', swapIndexPairs)
+
+
+    function swapPlaces(boardSlots, swapOne, swapTwo) {
+      // function to swap two places in board slots... 
+    }
+
+
+
+
+
+  }
+
 
 
 
@@ -76,6 +106,7 @@ function App() {
       </div>
 
       <div className='logistics'>
+        <button onClick={() => shuffleBoardRound(boardSlots)}>Shuffle</button>
         <button onClick={() => beginScoringRound(boardSlots)}>Score</button>
         <p>Total</p>
         <h1>{boardScore}</h1>

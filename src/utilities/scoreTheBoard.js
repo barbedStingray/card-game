@@ -1,4 +1,7 @@
 
+import locationTree from './locationTree.js'
+
+
 
 const animalBucket = ['Bug', 'Dog', 'Lion', 'Bear', 'Gorilla', 'Meerekat', 'Warthog', 'Monkey']
 const royaltyBucket = ['King', 'Queen', 'Prince', 'Princess']
@@ -6,32 +9,14 @@ const bucketTree = {
     'Animal': animalBucket,
     'Royalty': royaltyBucket,
 }
-const locationTree = {
-    'SELF': { 0: [0], 1: [1], 2: [2], 3: [3], 4: [4], 5: [5], 6: [6], 7: [7] },
-    'INPLAY': { 
-        0: [1, 2, 3, 4, 5, 6, 7], 
-        1: [0, 2, 3, 4, 5, 6, 7], 
-        2: [0, 1, 3, 4, 5, 6, 7], 
-        3: [0, 1, 2, 4, 5, 6, 7], 
-        4: [0, 1, 2, 3, 5, 6, 7], 
-        5: [0, 1, 2, 3, 4, 6, 7], 
-        6: [0, 1, 2, 3, 4, 5, 7], 
-        7: [0, 1, 2, 3, 4, 5, 6] 
-    },
-    'NEIGHBOR': { 0: [2], 1: [3], 2: [0, 4], 3: [1, 5], 4: [2, 6], 5: [3, 7], 6: [4], 7: [5] },
-    'OPPOSITE': { 0: [1], 1: [0], 2: [3], 3: [2], 4: [5], 5: [4], 6: [7], 7: [6] },
-    // OPPONENT
-    // OPPOSITE
-}
-
-
-
 
 export default function scoreTheBoard(boardSlots) {
     console.log('scoring Board')
 
     // identify all abilities... only need to do it once...
-    const allBoardAbilities = boardSlots.map((toon) => toon.abilities).flat()
+    const boardScoringAbilities = boardSlots.map((toon) => toon.abilities).flat()
+        .filter((ability) => ability.abilityType === 'SCORE')
+    console.log('allBoardAbilities', boardScoringAbilities)
 
     // ! INITIAL Reduce, each dToon one by one // do I want to reduce? or do I want an array of points? 
     const boardTotal = boardSlots.reduce((totalScore, dToon, index) => {
@@ -39,7 +24,7 @@ export default function scoreTheBoard(boardSlots) {
         const dToonIndex = index
 
         // ! loop through each ability in play (this is inside each dToon)
-        const additionalPoints = allBoardAbilities.reduce((abilityTotal, ability) => {
+        const additionalPoints = boardScoringAbilities.reduce((abilityTotal, ability) => {
             // console.log('looping through Abilities:', ability.ability)
 
             // ! Check if dToon is inside target location
@@ -117,7 +102,7 @@ export default function scoreTheBoard(boardSlots) {
         return totalScore + dToon.points + additionalPoints
     }, 0)
 
-    
+
     return boardTotal
 }
 

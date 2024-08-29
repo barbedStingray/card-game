@@ -13,24 +13,24 @@ const dToons = [
         groups: [],
         abilities: [
             {
-                ability: '-5 to opposing black card',
-                // todo will probably need a type to split board scoring vs board rearranging...
+                ability: '+3 if next to any Anna',
+                abilityType: 'SCORE',
                 abilityOrigin: 'Elsa', // origin position of the ability - determines neighbors / locations... 
                 
                 targets: { // not every target needs a condition. Targets are free.
-                    color: ['Black'],
+                    character: ['Elsa'],
                 },
                 targetMatch: 'every',
-                targetLocation: 'OPPOSITE',
+                targetLocation: 'SELF',
                 
                 conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
-                    color: ['Black'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
+                    character: ['Anna'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
                 },
                 conditionMatch: 'every', // or every // this means it can match some of the conditionCategories, or ALL
-                conditionLocation: 'OPPOSITE', // location check for conditions - Does this need to be an array?
+                conditionLocation: 'NEIGHBOR', // location check for conditions - Does this need to be an array?
 
                 oneShot: true, // how many times the bonus should be applied
-                bonus: '-5', // 1x doubles... 2x triples... 
+                bonus: '3', // 1x doubles... 2x triples... 
             },
         ],
         displayImage: 'displayImage simpleImage gameImage',
@@ -72,6 +72,31 @@ const dToons = [
         points: 4,
         groups: [],
         abilities: [
+            {
+                ability: 'Swap Places with the opposing card',
+                abilityType: 'BOARD',
+                abilityOrigin: 'Olaf', 
+                
+                boardSet: 'SWAP',
+
+                targets: {
+                    character: ['Olaf'],
+                },
+                // targetMatch: 'every',
+                targetLocation: 'SELF',
+
+                swapTarget: {
+                    // if condition exists...
+                },
+                // swapTargetMatch: 'every',
+                swapTargetLocation: 'OPPOSITE',
+
+                // conditions: { 
+                //     // character: ['Anna'], 
+                // },
+                // // conditionMatch: 'every',
+                // conditionLocation: 'OPPOSITE',
+            },
         ],
         displayImage: 'displayImage simpleImage gameImage',
     },
