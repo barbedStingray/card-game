@@ -11,15 +11,15 @@ const bucketTree = {
 }
 
 export default function scoreTheBoard(boardSlots) {
-    console.log('scoring Board')
+    console.log('scoring Board', boardSlots)
 
     // identify all abilities... only need to do it once...
-    const allScoringAbilities = boardSlots.map((toon) => toon.abilities).flat()
+    const allScoringAbilities = boardSlots.map((toon) => toon?.abilities ?? []).flat()
         .filter((ability) => ability.abilityType === 'SCORE')
     console.log('allScoringAbilities', allScoringAbilities)
 
-    // ! INITIAL Reduce, each dToon one by one // do I want to reduce? or do I want an array of points? 
-    const boardTotal = boardSlots.reduce((totalScore, dToon, index) => {
+    // ! INITIAL go over each dToon one by one // I want an array of points
+    const boardTotal = boardSlots.map((dToon, index) => {
         // console.log(`SCORING dToon... ${dToon.character}`, dToon)
         const dToonIndex = index
 
@@ -29,7 +29,7 @@ export default function scoreTheBoard(boardSlots) {
 
             // ! Check if dToon is inside target location
             const { targetLocation, abilityOrigin } = ability
-            const abilityOriginIndex = boardSlots.map((toon) => toon.character).indexOf(abilityOrigin)
+            const abilityOriginIndex = boardSlots.map((toon) => toon?.character ?? null).indexOf(abilityOrigin)
             const isTargetInLocation = locationTree[targetLocation][abilityOriginIndex].includes(dToonIndex)
 
             if (!isTargetInLocation) {
@@ -67,7 +67,7 @@ export default function scoreTheBoard(boardSlots) {
 
                 return categories[conditionMatch]((conditionCategory) => {
                     const conditionValues = bucketTree[conditions[conditionCategory]] || conditions[conditionCategory]
-                    const characterAtt = boardSlots[position][conditionCategory]
+                    const characterAtt = boardSlots[position]?.[conditionCategory]
                     const characterAttributes = Array.isArray(characterAtt) ? characterAtt : [characterAtt]
                     // console.log('conditionValues', conditionValues)
                     // console.log('characterAttributes', characterAttributes)
@@ -98,11 +98,9 @@ export default function scoreTheBoard(boardSlots) {
         }, 0)
 
         // console.log(`${dToon.character} addtionalPoints`, additionalPoints)
-        console.log(`${dToonIndex}-${dToon.character} pointValue: ${dToon.points} extra: ${additionalPoints}`)
-        return totalScore + dToon.points + additionalPoints
-    }, 0)
-
-
+        console.log(`${dToonIndex}-${dToon?.character ?? null} pointValue: ${dToon?.points ?? null} extra: ${additionalPoints}`)
+        return (dToon?.points ?? 0) + additionalPoints
+    })
     return boardTotal
 }
 

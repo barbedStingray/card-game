@@ -7,88 +7,85 @@ import locationTree from './utilities/locationTree.js'
 
 function App() {
 
-  const [boardSlots, setBoardSlots] = useState(dToons)
+  const [gameCount, setGameCount] = useState(0)
+  const [toonOrderArray, setToonOrderArray] = useState(dToons)
+
+  const [boardSlots, setBoardSlots] = useState(Array(8).fill(null))
   const [boardScore, setBoardScore] = useState(0)
   const [myToonScore, setMyToonScore] = useState(0)
   const [opponentScore, setOpponentScore] = useState(0)
 
-  const [myToons, setMyToons] = useState(dToons.filter((_, i) => i % 2 === 0))
-  const [opponentToons, setOpponentToons] = useState(dToons.filter((_, i) => i % 2 !== 0))
+  const [myToons, setMyToons] = useState(boardSlots.filter((_, i) => i % 2 === 0))
+  const [opponentToons, setOpponentToons] = useState(boardSlots.filter((_, i) => i % 2 !== 0))
 
 
-  // function movedToon(dToon, location) {
-  //   if (location === 'board') {
-  //     setBoardSlots((prevSlots) => [...prevSlots, dToon])
-  //     setDeckSlots(deckSlots.filter((toon) => toon.id !== dToon.id))
-  //   } else {
-  //     setDeckSlots((prevSlots) => [...prevSlots, dToon])
-  //     setBoardSlots(boardSlots.filter((toon) => toon.id !== dToon.id))
-  //   }
-  // }
+
+  function placeCardIntoPlay() {
+    console.log('placing card into play', gameCount)
+
+    const newBoardSlots = [...boardSlots]
+    newBoardSlots[gameCount] = toonOrderArray[gameCount]
+    setBoardSlots(newBoardSlots)
+    setMyToons(newBoardSlots.filter((_, i) => i % 2 === 0))
+    setOpponentToons(newBoardSlots.filter((_, i) => i % 2 !== 0))
+    setGameCount(gameCount + 1)
+  }
 
 
+  function eliminateDuplicates() {
+    
+  }
 
   function beginScoringRound(boardSlots) {
     console.log('begin Scoring Round')
 
-    // ! settle Score of the board
     // todo This will likely need to be the array of scores...
     const entireBoardScore = scoreTheBoard(boardSlots)
+    console.log('ENTIRE BOARD SCORE ARRAY', entireBoardScore)
 
-    // const newMyToonScore = entireBoardScore.reduce((sum, x, i) => { return i % 2 === 0 ? sum + x : sum }, 0) // This has to be the sum of all the even positions
-    // const newOpponentScore = entireBoardScore.reduce((sum, x, i) => i % 2 !== 0 ? sum + x : sum, 0) // This has to be the sum of all the odd positions
-    // setMyToonScore(newMyToonScore)
-    // setOpponentScore(newOpponentScore)
-    setBoardScore(entireBoardScore)
+    const newMyToonScore = entireBoardScore.reduce((sum, x, i) => { return i % 2 === 0 ? sum + x : sum }, 0) // This has to be the sum of all the even positions
+    const newOpponentScore = entireBoardScore.reduce((sum, x, i) => i % 2 !== 0 ? sum + x : sum, 0) // This has to be the sum of all the odd positions
+    setMyToonScore(newMyToonScore)
+    setOpponentScore(newOpponentScore)
+    setBoardScore(entireBoardScore.reduce((sum, x) => sum + x, 0))
   }
 
 
 
-  function shuffleBoardRound(boardSlots) {
-    console.log('shuffling board', boardSlots)
+  function boardAffectsRound(boardSlots) {
+    console.log('affecting the board', boardSlots)
 
-    // abilities that have yet to be used
-    const allBoardAbilities = boardSlots.map((toon) => toon.abilities).flat().filter((ability) => ability.abilityType === 'BOARD' && ability.beenUsed === false)
+    // abilities that have yet to be used // ?? OPTIONAL CHAINING
+    const allBoardAbilities = boardSlots.map((toon) => toon?.abilities ?? []).flat().filter((ability) => ability.abilityType === 'BOARD')
     console.log('allBoardAbilities', allBoardAbilities)
-    
-    const swapIndexPairs = allBoardAbilities.map((ability) => {
-      const abilityOriginIndex = boardSlots.map((toon) => toon.character).indexOf(ability.abilityOrigin)
-      const targetIndex = locationTree[ability.targetLocation][abilityOriginIndex]
-      const swapTargetIndex = locationTree[ability.swapTargetLocation][abilityOriginIndex]
-      const swapIndexes = [targetIndex, swapTargetIndex].flat()
-      console.log(ability.ability)
-      console.log('ability.targetLocation', ability.targetLocation)
 
-      // mark ability as used
-      ability.beenUsed = true
+    // for each toon ability ?? 
+    allBoardAbilities.forEach((ability) => {
+      console.log('FOR EACH', ability)
 
-      return swapIndexes
+      // check if ability has been used
+      if (ability.beenUsed) return
+
+      if (ability.boardSet === 'SWAP') {
+        console.log('ability is swap')
+
+        // I need the position of the first swap
+        // I need the position of the second swap
+
+
+
+      }
+
+
+
     })
-    console.log('swapIndexPairs', swapIndexPairs)
-
-    function swapPlaces(boardSlots, swapTargets) {
-      console.log('swappingPlaces', boardSlots, swapTargets)
-      const newBoardSlots = [...boardSlots]
-      swapTargets.forEach((targetPair) => {
-        const [firstIndex, secondIndex] = targetPair
-        const firstToon = newBoardSlots[firstIndex]
-        const secondToon = newBoardSlots[secondIndex]
-        console.log('firstToon', firstToon)
-        console.log('secondToon', secondToon)
-        newBoardSlots[targetPair[0]] = secondToon
-        newBoardSlots[targetPair[1]] = firstToon
-        console.log(newBoardSlots)
-      })
-      return newBoardSlots
-    }
-
-    const afterSwapSpots = swapPlaces(boardSlots, swapIndexPairs)
-    console.log('afterSwapSpots', afterSwapSpots)
 
 
-    setBoardSlots(afterSwapSpots)
-    setMyToons(afterSwapSpots.filter((_, i) => i % 2 === 0))
-    setOpponentToons(afterSwapSpots.filter((_, i) => i % 2 !== 0))
+
+
+    // setBoardSlots(afterSwapSpots)
+    // setMyToons(afterSwapSpots.filter((_, i) => i % 2 === 0))
+    // setOpponentToons(afterSwapSpots.filter((_, i) => i % 2 !== 0))
   }
 
 
@@ -102,12 +99,18 @@ function App() {
         <div className='gameside'>
           {myToons.map((dtoon, i) => (
             <div className='dToonCard' key={i}>
-              <p>{dtoon.character}</p>
-              <p>{dtoon.color} {dtoon.points} {dtoon.kind}</p>
-              <p>{dtoon.groups}</p>
-              {dtoon.abilities.map((ability, i) => (
-                <p key={i}>{ability.ability}</p>
-              ))}
+              {dtoon ? (
+                <>
+                  <p>{dtoon.character}</p>
+                  <p>{dtoon.color} {dtoon.points} {dtoon.kind}</p>
+                  <p>{dtoon.groups}</p>
+                  {dtoon.abilities.map((ability, i) => (
+                    <p key={i}>{ability.ability}</p>
+                  ))}
+                </>
+              ) : (
+                <p>EMPTY SLOT</p>
+              )}
             </div>
           ))}
         </div>
@@ -115,19 +118,26 @@ function App() {
         <div className='deckside'>
           {opponentToons.map((dtoon, i) => (
             <div className='dToonCard' key={i}>
-              <p>{dtoon.character}</p>
-              <p>{dtoon.color} {dtoon.points} {dtoon.kind}</p>
-              <p>{dtoon.groups}</p>
-              {dtoon.abilities.map((ability, i) => (
-                <p key={i}>{ability.ability}</p>
-              ))}
+              {dtoon ? (
+                <>
+                  <p>{dtoon.character}</p>
+                  <p>{dtoon.color} {dtoon.points} {dtoon.kind}</p>
+                  <p>{dtoon.groups}</p>
+                  {dtoon.abilities.map((ability, i) => (
+                    <p key={i}>{ability.ability}</p>
+                  ))}
+                </>
+              ) : (
+                <p>EMPTY SLOT</p>
+              )}
             </div>
           ))}
         </div>
       </div>
 
       <div className='logistics'>
-        <button onClick={() => shuffleBoardRound(boardSlots)}>BOARD</button>
+        <button onClick={() => placeCardIntoPlay(boardSlots)}>PLACE</button>
+        <button onClick={() => boardAffectsRound(boardSlots)}>BOARD</button>
         <button onClick={() => beginScoringRound(boardSlots)}>SCORE</button>
         <p>Total</p>
         <h1>{boardScore}</h1>
