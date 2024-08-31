@@ -14,15 +14,15 @@ const dToons = [
         groups: [],
         abilities: [
             {
-                ability: '+3 if next to any Anna',
+                ability: '+3 to any neighboring Anna',
                 abilityType: 'SCORE',
                 abilityOrigin: 'Elsa', // origin position of the ability - determines neighbors / locations... 
                 
                 targets: { // not every target needs a condition. Targets are free.
-                    character: ['Elsa'],
+                    character: ['Anna'],
                 },
                 targetMatch: 'every',
-                targetLocation: 'SELF',
+                targetLocation: 'NEIGHBOR',
                 
                 conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
                     character: ['Anna'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
@@ -109,7 +109,7 @@ const dToons = [
     {
         id: 5,
         active: true,
-        character: 'Anna', // null / ursula
+        character: 'Ursula',
         color: 'Black',
         points: 10,
         groups: [],
@@ -131,7 +131,7 @@ const dToons = [
     {
         id: 7,
         active: true,
-        character: 'Gaston',
+        character: 'Anna',
         color: 'Black',
         points: 10,
         groups: [],

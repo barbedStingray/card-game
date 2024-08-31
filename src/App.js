@@ -64,17 +64,21 @@ function App() {
   }
 
 
+  // id like to create a new board affect - swap
 
   function boardAffectsRound(boardSlots) {
-    console.log('affecting the board', boardSlots)
+    // console.log('affecting the board', boardSlots)
+
+    const activeInPlayBoardSlots = boardSlots.map((slot) => (slot?.active ?? false) ? slot : null)
+    console.log('activeInPlayBoardSlots', activeInPlayBoardSlots)
 
     // abilities that have yet to be used // ?? OPTIONAL CHAINING
-    const allBoardAbilities = boardSlots.map((toon) => toon?.abilities ?? []).flat().filter((ability) => ability.abilityType === 'BOARD')
+    const allBoardAbilities = activeInPlayBoardSlots.map((toon) => toon?.abilities ?? []).flat().filter((ability) => ability.abilityType === 'BOARD')
     console.log('allBoardAbilities', allBoardAbilities)
 
     // for each toon ability ?? 
     allBoardAbilities.forEach((ability) => {
-      console.log('FOR EACH', ability)
+      console.log('FOR EACH', ability.ability)
 
       // check if ability has been used
       if (ability.beenUsed) return
@@ -82,12 +86,21 @@ function App() {
       if (ability.boardSet === 'SWAP') {
         console.log('ability is swap')
 
-        // I need the position of the first swap
-        // I need the position of the second swap
+        // how do you handle boardSlots when they change... if you return null, the characters will disappear
+        const newBoardSlots = [...boardSlots]
 
+        const abilityOriginIndex = activeInPlayBoardSlots.map((toon) => toon?.character ?? []).indexOf(ability.abilityOrigin)
+        console.log('abilityOriginIndex', abilityOriginIndex)
+        const firstSwapToonIndex = locationTree[ability.targetLocation][abilityOriginIndex]
+        console.log('firstSwapToonIndex', firstSwapToonIndex)
+        const secondSwapToonIndex = locationTree[ability.swapTargetLocation][abilityOriginIndex]
+        console.log('secondSwapToonIndex', secondSwapToonIndex)
 
-
+        console.log(activeInPlayBoardSlots[firstSwapToonIndex])
+        
       }
+
+
 
 
 

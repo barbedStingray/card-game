@@ -12,17 +12,17 @@ const bucketTree = {
 
 export default function scoreTheBoard(boardSlots) {
     console.log('scoring Board', boardSlots)
-    const scoringBoardSlots = boardSlots.map((slot) => (slot?.active ?? false) ? slot : null)
-    console.log('scoringBoardSlots', scoringBoardSlots)
+    const activeInPlayBoardSlots = boardSlots.map((slot) => (slot?.active ?? false) ? slot : null)
+    console.log('activeInPlayBoardSlots', activeInPlayBoardSlots)
 
     
     // identify all abilities... only need to do it once...
-    const allScoringAbilities = scoringBoardSlots.map((toon) => toon?.abilities ?? []).flat()
+    const allScoringAbilities = activeInPlayBoardSlots.map((toon) => toon?.abilities ?? []).flat()
         .filter((ability) => ability.abilityType === 'SCORE')
     console.log('allScoringAbilities', allScoringAbilities)
 
     // ! INITIAL go over each dToon one by one // I want an array of points
-    const boardTotal = scoringBoardSlots.map((dToon, index) => {
+    const boardTotal = activeInPlayBoardSlots.map((dToon, index) => {
         // console.log(`SCORING dToon... ${dToon.character}`, dToon)
         const dToonIndex = index
 
@@ -32,7 +32,7 @@ export default function scoreTheBoard(boardSlots) {
 
             // ! Check if dToon is inside target location
             const { targetLocation, abilityOrigin } = ability
-            const abilityOriginIndex = scoringBoardSlots.map((toon) => toon?.character ?? null).indexOf(abilityOrigin)
+            const abilityOriginIndex = activeInPlayBoardSlots.map((toon) => toon?.character ?? null).indexOf(abilityOrigin)
             const isTargetInLocation = locationTree[targetLocation][abilityOriginIndex].includes(dToonIndex)
 
             if (!isTargetInLocation) {
@@ -45,6 +45,8 @@ export default function scoreTheBoard(boardSlots) {
             const targetCategories = Object.keys(targets)
 
             const isTargetSatisfied = targetCategories.length === 0 || targetCategories[targetMatch]((category) => {
+                
+                if (!dToon) return false
                 const targetValues = bucketTree[targets[category]] || targets[category]
                 const dToonCategoryValues = Array.isArray(dToon[category]) ? dToon[category] : [dToon[category]]
                 // console.log('targetValues', targetValues)
@@ -68,9 +70,10 @@ export default function scoreTheBoard(boardSlots) {
                 const categories = Object.keys(conditions)
                 // console.log('position', position, 'total categories:', categories)
 
+                // ! if position is null ??? Will you need to return that? 
                 return categories[conditionMatch]((conditionCategory) => {
                     const conditionValues = bucketTree[conditions[conditionCategory]] || conditions[conditionCategory]
-                    const characterAtt = scoringBoardSlots[position]?.[conditionCategory]
+                    const characterAtt = activeInPlayBoardSlots[position]?.[conditionCategory]
                     const characterAttributes = Array.isArray(characterAtt) ? characterAtt : [characterAtt]
                     // console.log('conditionValues', conditionValues)
                     // console.log('characterAttributes', characterAttributes)
