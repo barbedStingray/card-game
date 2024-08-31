@@ -25,16 +25,29 @@ function App() {
 
     const newBoardSlots = [...boardSlots]
     newBoardSlots[gameCount] = toonOrderArray[gameCount]
+
     setBoardSlots(newBoardSlots)
     setMyToons(newBoardSlots.filter((_, i) => i % 2 === 0))
     setOpponentToons(newBoardSlots.filter((_, i) => i % 2 !== 0))
     setGameCount(gameCount + 1)
   }
 
+  function identifyInactiveCards(boardSlots) {
+    console.log('identifying inactive cards', boardSlots)
+    const newBoardSlots = [...boardSlots]    
+    const duplicateCharacters = newBoardSlots.map((slot) => slot?.character ?? []).filter((character, i, arr) => arr.indexOf(character) !== i)
+    newBoardSlots.forEach((slot) => {
+      if(duplicateCharacters.includes(slot?.character ?? null)) {
+        slot.active = false
+      }
+    })
 
-  function eliminateDuplicates() {
-    
+    console.log('The New Board Slots', newBoardSlots)
+    setBoardSlots(newBoardSlots)
+    setMyToons(newBoardSlots.filter((_, i) => i % 2 === 0))
+    setOpponentToons(newBoardSlots.filter((_, i) => i % 2 !== 0))
   }
+
 
   function beginScoringRound(boardSlots) {
     console.log('begin Scoring Round')
@@ -100,14 +113,14 @@ function App() {
           {myToons.map((dtoon, i) => (
             <div className='dToonCard' key={i}>
               {dtoon ? (
-                <>
+                <div style={{ color: dtoon.active ? '' : 'red'}}>
                   <p>{dtoon.character}</p>
                   <p>{dtoon.color} {dtoon.points} {dtoon.kind}</p>
                   <p>{dtoon.groups}</p>
                   {dtoon.abilities.map((ability, i) => (
                     <p key={i}>{ability.ability}</p>
                   ))}
-                </>
+                </div>
               ) : (
                 <p>EMPTY SLOT</p>
               )}
@@ -119,14 +132,14 @@ function App() {
           {opponentToons.map((dtoon, i) => (
             <div className='dToonCard' key={i}>
               {dtoon ? (
-                <>
+                <div style={{ color: dtoon.active ? '' : 'red'}}>
                   <p>{dtoon.character}</p>
                   <p>{dtoon.color} {dtoon.points} {dtoon.kind}</p>
                   <p>{dtoon.groups}</p>
                   {dtoon.abilities.map((ability, i) => (
                     <p key={i}>{ability.ability}</p>
                   ))}
-                </>
+                </div>
               ) : (
                 <p>EMPTY SLOT</p>
               )}
@@ -137,6 +150,7 @@ function App() {
 
       <div className='logistics'>
         <button onClick={() => placeCardIntoPlay(boardSlots)}>PLACE</button>
+        <button onClick={() => identifyInactiveCards(boardSlots)}>ACTIVE</button>
         <button onClick={() => boardAffectsRound(boardSlots)}>BOARD</button>
         <button onClick={() => beginScoringRound(boardSlots)}>SCORE</button>
         <p>Total</p>

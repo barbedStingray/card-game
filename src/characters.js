@@ -7,6 +7,7 @@
 const dToons = [
     {
         id: 0,
+        active: true,
         character: 'Elsa',
         color: 'Silver',
         points: 3,
@@ -37,6 +38,7 @@ const dToons = [
     },
     {
         id: 1,
+        active: true,
         character: 'Maleficent',
         color: 'Black',
         points: 10,
@@ -47,7 +49,8 @@ const dToons = [
     },
     {
         id: 2,
-        character: 'Anna',
+        active: true,
+        character: 'Anna', // null
         color: 'Blue',
         points: 8,
         groups: ['Pirate', 'Animal', 'Queen'],
@@ -57,6 +60,7 @@ const dToons = [
     },
     {
         id: 3,
+        active: true,
         character: 'Jafar',
         color: 'Black',
         points: 10,
@@ -67,6 +71,7 @@ const dToons = [
     },
     {
         id: 4,
+        active: true,
         character: 'Olaf',
         color: 'Silver',
         points: 4,
@@ -103,7 +108,8 @@ const dToons = [
     },
     {
         id: 5,
-        character: 'Ursula',
+        active: true,
+        character: 'Anna', // null / ursula
         color: 'Black',
         points: 10,
         groups: [],
@@ -113,6 +119,7 @@ const dToons = [
     },
     {
         id: 6,
+        active: true,
         character: 'Kristoff',
         color: 'Blue',
         points: 5,
@@ -123,6 +130,7 @@ const dToons = [
     },
     {
         id: 7,
+        active: true,
         character: 'Gaston',
         color: 'Black',
         points: 10,

@@ -12,14 +12,17 @@ const bucketTree = {
 
 export default function scoreTheBoard(boardSlots) {
     console.log('scoring Board', boardSlots)
+    const scoringBoardSlots = boardSlots.map((slot) => (slot?.active ?? false) ? slot : null)
+    console.log('scoringBoardSlots', scoringBoardSlots)
 
+    
     // identify all abilities... only need to do it once...
-    const allScoringAbilities = boardSlots.map((toon) => toon?.abilities ?? []).flat()
+    const allScoringAbilities = scoringBoardSlots.map((toon) => toon?.abilities ?? []).flat()
         .filter((ability) => ability.abilityType === 'SCORE')
     console.log('allScoringAbilities', allScoringAbilities)
 
     // ! INITIAL go over each dToon one by one // I want an array of points
-    const boardTotal = boardSlots.map((dToon, index) => {
+    const boardTotal = scoringBoardSlots.map((dToon, index) => {
         // console.log(`SCORING dToon... ${dToon.character}`, dToon)
         const dToonIndex = index
 
@@ -29,7 +32,7 @@ export default function scoreTheBoard(boardSlots) {
 
             // ! Check if dToon is inside target location
             const { targetLocation, abilityOrigin } = ability
-            const abilityOriginIndex = boardSlots.map((toon) => toon?.character ?? null).indexOf(abilityOrigin)
+            const abilityOriginIndex = scoringBoardSlots.map((toon) => toon?.character ?? null).indexOf(abilityOrigin)
             const isTargetInLocation = locationTree[targetLocation][abilityOriginIndex].includes(dToonIndex)
 
             if (!isTargetInLocation) {
@@ -67,7 +70,7 @@ export default function scoreTheBoard(boardSlots) {
 
                 return categories[conditionMatch]((conditionCategory) => {
                     const conditionValues = bucketTree[conditions[conditionCategory]] || conditions[conditionCategory]
-                    const characterAtt = boardSlots[position]?.[conditionCategory]
+                    const characterAtt = scoringBoardSlots[position]?.[conditionCategory]
                     const characterAttributes = Array.isArray(characterAtt) ? characterAtt : [characterAtt]
                     // console.log('conditionValues', conditionValues)
                     // console.log('characterAttributes', characterAttributes)
