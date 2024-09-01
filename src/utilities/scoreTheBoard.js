@@ -16,7 +16,6 @@ export default function scoreTheBoard(boardSlots) {
     console.log('activeInPlayBoardSlots', activeInPlayBoardSlots)
 
     
-    // identify all abilities... only need to do it once...
     const allScoringAbilities = activeInPlayBoardSlots.map((toon) => toon?.abilities ?? []).flat()
         .filter((ability) => ability.abilityType === 'SCORE')
     console.log('allScoringAbilities', allScoringAbilities)
@@ -45,7 +44,7 @@ export default function scoreTheBoard(boardSlots) {
             const targetCategories = Object.keys(targets)
 
             const isTargetSatisfied = targetCategories.length === 0 || targetCategories[targetMatch]((category) => {
-                
+
                 if (!dToon) return false
                 const targetValues = bucketTree[targets[category]] || targets[category]
                 const dToonCategoryValues = Array.isArray(dToon[category]) ? dToon[category] : [dToon[category]]

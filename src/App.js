@@ -34,15 +34,15 @@ function App() {
 
   function identifyInactiveCards(boardSlots) {
     console.log('identifying inactive cards', boardSlots)
-    const newBoardSlots = [...boardSlots]    
+    const newBoardSlots = [...boardSlots]
     const duplicateCharacters = newBoardSlots.map((slot) => slot?.character ?? []).filter((character, i, arr) => arr.indexOf(character) !== i)
     newBoardSlots.forEach((slot) => {
-      if(duplicateCharacters.includes(slot?.character ?? null)) {
+      if (duplicateCharacters.includes(slot?.character ?? null)) {
         slot.active = false
       }
     })
 
-    console.log('The New Board Slots', newBoardSlots)
+    // console.log('The New Board Slots', newBoardSlots)
     setBoardSlots(newBoardSlots)
     setMyToons(newBoardSlots.filter((_, i) => i % 2 === 0))
     setOpponentToons(newBoardSlots.filter((_, i) => i % 2 !== 0))
@@ -52,12 +52,11 @@ function App() {
   function beginScoringRound(boardSlots) {
     console.log('begin Scoring Round')
 
-    // todo This will likely need to be the array of scores...
     const entireBoardScore = scoreTheBoard(boardSlots)
     console.log('ENTIRE BOARD SCORE ARRAY', entireBoardScore)
 
-    const newMyToonScore = entireBoardScore.reduce((sum, x, i) => { return i % 2 === 0 ? sum + x : sum }, 0) // This has to be the sum of all the even positions
-    const newOpponentScore = entireBoardScore.reduce((sum, x, i) => i % 2 !== 0 ? sum + x : sum, 0) // This has to be the sum of all the odd positions
+    const newMyToonScore = entireBoardScore.reduce((sum, x, i) => { return i % 2 === 0 ? sum + x : sum }, 0)
+    const newOpponentScore = entireBoardScore.reduce((sum, x, i) => i % 2 !== 0 ? sum + x : sum, 0)
     setMyToonScore(newMyToonScore)
     setOpponentScore(newOpponentScore)
     setBoardScore(entireBoardScore.reduce((sum, x) => sum + x, 0))
@@ -67,47 +66,62 @@ function App() {
   // id like to create a new board affect - swap
 
   function boardAffectsRound(boardSlots) {
-    // console.log('affecting the board', boardSlots)
+    console.log('affecting the board', boardSlots)
 
-    const activeInPlayBoardSlots = boardSlots.map((slot) => (slot?.active ?? false) ? slot : null)
-    console.log('activeInPlayBoardSlots', activeInPlayBoardSlots)
-
-    // abilities that have yet to be used // ?? OPTIONAL CHAINING
-    const allBoardAbilities = activeInPlayBoardSlots.map((toon) => toon?.abilities ?? []).flat().filter((ability) => ability.abilityType === 'BOARD')
+    const activeToons = boardSlots.filter((toon) => toon?.active === true ?? false)
+    console.log('activeToons', activeToons)
+    const toonAbilities = activeToons.map((toon) => toon.abilities).flat()
+    console.log('toonAbilities', toonAbilities)
+    const allBoardAbilities = toonAbilities.filter((ability) => ability.abilityType === 'BOARD') // include used/unused abilities here? 
     console.log('allBoardAbilities', allBoardAbilities)
 
-    // for each toon ability ?? 
+
     allBoardAbilities.forEach((ability) => {
       console.log('FOR EACH', ability.ability)
 
       // check if ability has been used
       if (ability.beenUsed) return
 
+      // ! in swap ability
       if (ability.boardSet === 'SWAP') {
         console.log('ability is swap')
 
-        // how do you handle boardSlots when they change... if you return null, the characters will disappear
         const newBoardSlots = [...boardSlots]
 
-        const abilityOriginIndex = activeInPlayBoardSlots.map((toon) => toon?.character ?? []).indexOf(ability.abilityOrigin)
-        console.log('abilityOriginIndex', abilityOriginIndex)
-        const firstSwapToonIndex = locationTree[ability.targetLocation][abilityOriginIndex]
-        console.log('firstSwapToonIndex', firstSwapToonIndex)
-        const secondSwapToonIndex = locationTree[ability.swapTargetLocation][abilityOriginIndex]
-        console.log('secondSwapToonIndex', secondSwapToonIndex)
-
-        console.log(activeInPlayBoardSlots[firstSwapToonIndex])
+        // ! identify indexes
+        const abilityOriginIndex = boardSlots.map((toon) => toon?.character ?? []).indexOf(ability.abilityOrigin)
+        const firstSwapToonIndex = locationTree[ability.targetLocation][abilityOriginIndex][0]
+        const secondSwapToonIndex = locationTree[ability.swapTargetLocation][abilityOriginIndex][0]
+        const [toonOne, toonTwo] = [newBoardSlots[firstSwapToonIndex], newBoardSlots[secondSwapToonIndex]]
+        console.log('toonOne, toonTwo', toonOne, toonTwo)
         
+        // ! check for null toons (inactive has already been filtered)
+        if (!toonOne || !toonTwo) {
+          console.log('null value for toon!')
+          return
+        }
+
+        // ! ALL CLEAR make the swap
+        // Perform the swap
+        [newBoardSlots[firstSwapToonIndex], newBoardSlots[secondSwapToonIndex]] = [toonTwo, toonOne];
+        console.log('NEW BOARD', newBoardSlots)
+
+        // ! mark ability as used
+        ability.beenUsed = true
+
+        // ! set the UI
+        setBoardSlots(newBoardSlots)
+        setMyToons(newBoardSlots.filter((_, i) => i % 2 === 0))
+        setOpponentToons(newBoardSlots.filter((_, i) => i % 2 !== 0))
       }
-
-
-
-
-
     })
 
 
 
+
+    
+    // in the end... what does this have to return? 
+    // new array of shuffled board slots... where abilities only trigger if the card is inplay...
 
     // setBoardSlots(afterSwapSpots)
     // setMyToons(afterSwapSpots.filter((_, i) => i % 2 === 0))
@@ -126,7 +140,7 @@ function App() {
           {myToons.map((dtoon, i) => (
             <div className='dToonCard' key={i}>
               {dtoon ? (
-                <div style={{ color: dtoon.active ? '' : 'red'}}>
+                <div style={{ color: dtoon.active ? '' : 'red' }}>
                   <p>{dtoon.character}</p>
                   <p>{dtoon.color} {dtoon.points} {dtoon.kind}</p>
                   <p>{dtoon.groups}</p>
@@ -145,7 +159,7 @@ function App() {
           {opponentToons.map((dtoon, i) => (
             <div className='dToonCard' key={i}>
               {dtoon ? (
-                <div style={{ color: dtoon.active ? '' : 'red'}}>
+                <div style={{ color: dtoon.active ? '' : 'red' }}>
                   <p>{dtoon.character}</p>
                   <p>{dtoon.color} {dtoon.points} {dtoon.kind}</p>
                   <p>{dtoon.groups}</p>

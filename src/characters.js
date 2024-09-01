@@ -131,7 +131,7 @@ const dToons = [
     {
         id: 7,
         active: true,
-        character: 'Anna',
+        character: 'Olaf',
         color: 'Black',
         points: 10,
         groups: [],
