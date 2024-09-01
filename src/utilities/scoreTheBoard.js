@@ -2,7 +2,7 @@
 import locationTree from './locationTree.js'
 
 
-
+// own imports for buckets and lists...
 const animalBucket = ['Bug', 'Dog', 'Lion', 'Bear', 'Gorilla', 'Meerekat', 'Warthog', 'Monkey']
 const royaltyBucket = ['King', 'Queen', 'Prince', 'Princess']
 const bucketTree = {
@@ -10,12 +10,19 @@ const bucketTree = {
     'Royalty': royaltyBucket,
 }
 
+
+// Ideas for further scoring updates...
+// todo gain points for having the most / least points? 
+
+
+
+
 export default function scoreTheBoard(boardSlots) {
     console.log('scoring Board', boardSlots)
     const activeInPlayBoardSlots = boardSlots.map((slot) => (slot?.active ?? false) ? slot : null)
     console.log('activeInPlayBoardSlots', activeInPlayBoardSlots)
 
-    
+
     const allScoringAbilities = activeInPlayBoardSlots.map((toon) => toon?.abilities ?? []).flat()
         .filter((ability) => ability.abilityType === 'SCORE')
     console.log('allScoringAbilities', allScoringAbilities)

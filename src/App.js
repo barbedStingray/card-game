@@ -62,8 +62,50 @@ function App() {
     setBoardScore(entireBoardScore.reduce((sum, x) => sum + x, 0))
   }
 
+  // ! BOARD Powers... 
+  // todo opposing card loses it's adjacency affects...
+  // todo changing card kinds... groups... colors... heroes... 
+  // todo protecting / locking cards... prevent opponents from affecting you
+  // todo clone a card in play... opposing... neighboring... your choice... all stats except character
+  // todo copy / steal an ability, copy the last ability played...
+  // todo move a target card to the right/left/up/down/across...
 
-  // id like to create a new board affect - swap
+  // ! Advanced BOARD Powers...
+  // todo advanced colors... change color to the most represented color... to the game match color...
+  // todo STATUS EFFECTS poison... stun... freeze... blind... 
+  // todo Card sacrifice - buff another card by one becomming inactive...
+  // todo ? Time based effects / +1 for each card played?
+
+  // ? Cool Ideas to think about...
+  // territory control - fighting over kingdoms? +10 to whomever has more knights for a castle?
+  // Weather control variables? Environment / Gameboard Bonuses? 
+  // time manipulation... change flow of game? - ability to manipulate what a round is or play order...
+  // Countdown effects - big boom after a certain number of turns...
+  // vision/information - reveal opponents hand... 
+  // capture an opponent card? 
+  // Multi-phase abilities... +2 in the first round, but +5 if in the second round
+  // cards that alter win conditions? 
+  // Bouncing/eliminating cards back?
+  // reversing effects, redirecting points...
+  
+  
+  // ? Outside mechanics
+  // resource generation mechanic?? build up dust and apply it to powers...
+  // resource drain...
+  // summoning - summon barriers or tokens to do smaller things... 
+  // trap cards? playing on the opponents side?
+  // phasing - cards that can phase out of the game and then come back in... ghosts?
+  // retaliation cards - returns an attack when affected...
+  // mirror match (mirror) - copy the opponents board layout and abilities for a turn...
+  // rewind
+  // Hidden Effects... only revealed when a certain card is played...
+
+
+
+
+
+
+
 
   function boardAffectsRound(boardSlots) {
     console.log('affecting the board', boardSlots)
@@ -83,7 +125,7 @@ function App() {
       if (ability.beenUsed) return
 
       // ! in swap ability
-      if (ability.boardSet === 'SWAP') {
+      if (ability.boardSet === 'SWAP') { // ! Swap the Card ability
         console.log('ability is swap')
 
         const newBoardSlots = [...boardSlots]
@@ -94,7 +136,7 @@ function App() {
         const secondSwapToonIndex = locationTree[ability.swapTargetLocation][abilityOriginIndex][0]
         const [toonOne, toonTwo] = [newBoardSlots[firstSwapToonIndex], newBoardSlots[secondSwapToonIndex]]
         console.log('toonOne, toonTwo', toonOne, toonTwo)
-        
+
         // ! check for null toons (inactive has already been filtered)
         if (!toonOne || !toonTwo) {
           console.log('null value for toon!')
@@ -119,7 +161,7 @@ function App() {
 
 
 
-    
+
     // in the end... what does this have to return? 
     // new array of shuffled board slots... where abilities only trigger if the card is inplay...
 

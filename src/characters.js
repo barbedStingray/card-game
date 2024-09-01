@@ -14,23 +14,23 @@ const dToons = [
         groups: [],
         abilities: [
             {
-                ability: '+3 to any neighboring Anna',
+                ability: '+3 for each Opponent Black Card',
                 abilityType: 'SCORE',
                 abilityOrigin: 'Elsa', // origin position of the ability - determines neighbors / locations... 
                 
                 targets: { // not every target needs a condition. Targets are free.
-                    character: ['Anna'],
+                    character: ['Elsa'],
                 },
                 targetMatch: 'every',
-                targetLocation: 'NEIGHBOR',
+                targetLocation: 'SELF',
                 
                 conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
-                    character: ['Anna'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
+                    color: ['Black'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
                 },
                 conditionMatch: 'every', // or every // this means it can match some of the conditionCategories, or ALL
-                conditionLocation: 'NEIGHBOR', // location check for conditions - Does this need to be an array?
+                conditionLocation: 'OPPONENT', // location check for conditions - Does this need to be an array?
 
-                oneShot: true, // how many times the bonus should be applied
+                oneShot: false, // how many times the bonus should be applied
                 bonus: '3', // 1x doubles... 2x triples... 
             },
         ],
@@ -131,11 +131,32 @@ const dToons = [
     {
         id: 7,
         active: true,
-        character: 'Olaf',
+        character: 'Gaston',
         color: 'Black',
         points: 10,
         groups: [],
         abilities: [
+            {
+                ability: '+10 if this card is played last',
+                abilityType: 'SCORE',
+                abilityOrigin: 'Gaston', // origin position of the ability - determines neighbors / locations... 
+                
+                targets: { // not every target needs a condition. Targets are free.
+                    character: ['Gaston'],
+                },
+                targetMatch: 'every',
+                targetLocation: 'SELF',
+                
+                conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
+                    character: ['Gaston'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
+                },
+                conditionMatch: 'every', // or every // this means it can match some of the conditionCategories, or ALL
+                conditionLocation: 'LAST', // location check for conditions - Does this need to be an array?
+
+                oneShot: true, // how many times the bonus should be applied
+                bonus: '10', // 1x doubles... 2x triples... 
+            },
+
         ],
         displayImage: 'displayImage simpleImage gameImage',
     },
