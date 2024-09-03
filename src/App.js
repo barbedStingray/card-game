@@ -36,7 +36,7 @@ function App() {
 
 
   function beginScoringRound(boardSlots) {
-    console.log('begin Scoring Round')
+    console.log('begin Scoring Round', boardSlots)
 
     // ! Identify active cards
     const activeBoardSlots = identifyInactiveCards(boardSlots)

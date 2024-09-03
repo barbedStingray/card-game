@@ -39,7 +39,7 @@ const dToons = [
     {
         id: 1,
         active: true,
-        character: 'Maleficent',
+        character: 'Elsa',
         color: 'Black',
         points: 10,
         groups: [],
@@ -61,21 +61,21 @@ const dToons = [
     {
         id: 3,
         active: true,
-        character: 'Jafar',
-        color: 'Black',
-        points: 10,
+        character: 'Morph',
+        color: 'Silver',
+        points: 1,
         groups: [],
         abilities: [
             {
-                ability: 'Swap Places with the opposing card',
+                ability: 'Clone the opposing card',
                 abilityType: 'BOARD',
-                abilityOrigin: 'Jafar', 
+                abilityOrigin: 'Morph', 
                 
                 boardSet: 'CLONE',
                 beenUsed: false,
 
                 targets: {
-                    character: ['Olaf'],
+                    character: ['Morph'],
                 },
                 // targetMatch: 'every',
                 targetLocation: 'SELF',
@@ -84,7 +84,7 @@ const dToons = [
                     // if condition exists...
                 },
                 // swapTargetMatch: 'every',
-                swapTargetLocation: 'OPPOSITE',
+                copyTargetLocation: 'OPPOSITE',
 
                 // conditions: { 
                 //     // character: ['Anna'], 

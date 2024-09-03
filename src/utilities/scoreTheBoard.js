@@ -20,12 +20,12 @@ const bucketTree = {
 export default function scoreTheBoard(boardSlots) {
     console.log('scoring Board', boardSlots)
     const activeInPlayBoardSlots = boardSlots.map((slot) => (slot?.active ?? false) ? slot : null)
-    console.log('activeInPlayBoardSlots', activeInPlayBoardSlots)
+    // console.log('activeInPlayBoardSlots', activeInPlayBoardSlots)
 
 
     const allScoringAbilities = activeInPlayBoardSlots.map((toon) => toon?.abilities ?? []).flat()
         .filter((ability) => ability.abilityType === 'SCORE')
-    console.log('allScoringAbilities', allScoringAbilities)
+    // console.log('allScoringAbilities', allScoringAbilities)
 
     // ! INITIAL go over each dToon one by one // I want an array of points
     const boardTotal = activeInPlayBoardSlots.map((dToon, index) => {
