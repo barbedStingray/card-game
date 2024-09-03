@@ -55,27 +55,16 @@ const dToons = [
         points: 8,
         groups: ['Pirate', 'Animal', 'Queen'],
         abilities: [
-        ],
-        displayImage: 'displayImage simpleImage gameImage',
-    },
-    {
-        id: 3,
-        active: true,
-        character: 'Morph',
-        color: 'Silver',
-        points: 1,
-        groups: [],
-        abilities: [
             {
                 ability: 'Clone the opposing card',
                 abilityType: 'BOARD',
-                abilityOrigin: 'Morph', 
+                abilityOrigin: 'Anna', 
                 
                 boardSet: 'CLONE',
                 beenUsed: false,
 
                 targets: {
-                    character: ['Morph'],
+                    character: ['Anna'],
                 },
                 // targetMatch: 'every',
                 targetLocation: 'SELF',
@@ -92,6 +81,17 @@ const dToons = [
                 // // conditionMatch: 'every',
                 // conditionLocation: 'OPPOSITE',
             },
+        ],
+        displayImage: 'displayImage simpleImage gameImage',
+    },
+    {
+        id: 3,
+        active: true,
+        character: 'Morph',
+        color: 'Silver',
+        points: 1,
+        groups: [],
+        abilities: [
         ],
         displayImage: 'displayImage simpleImage gameImage',
     },
@@ -140,6 +140,32 @@ const dToons = [
         points: 10,
         groups: [],
         abilities: [
+            {
+                ability: 'Negates Opposing Cards abilities',
+                abilityType: 'BOARD',
+                abilityOrigin: 'Ursula', 
+                
+                boardSet: 'NEGATE',
+                beenUsed: false,
+
+                targets: {
+                    character: ['Ursula'],
+                },
+                // targetMatch: 'every',
+                targetLocation: 'SELF',
+
+                swapTarget: {
+                    // if condition exists...
+                },
+                // swapTargetMatch: 'every',
+                negateTargetLocation: 'OPPOSITE',
+
+                // conditions: { 
+                //     // character: ['Anna'], 
+                // },
+                // // conditionMatch: 'every',
+                // conditionLocation: 'OPPOSITE',
+            },
         ],
         displayImage: 'displayImage simpleImage gameImage',
     },
