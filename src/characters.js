@@ -66,6 +66,32 @@ const dToons = [
         points: 10,
         groups: [],
         abilities: [
+            {
+                ability: 'Swap Places with the opposing card',
+                abilityType: 'BOARD',
+                abilityOrigin: 'Jafar', 
+                
+                boardSet: 'CLONE',
+                beenUsed: false,
+
+                targets: {
+                    character: ['Olaf'],
+                },
+                // targetMatch: 'every',
+                targetLocation: 'SELF',
+
+                swapTarget: {
+                    // if condition exists...
+                },
+                // swapTargetMatch: 'every',
+                swapTargetLocation: 'OPPOSITE',
+
+                // conditions: { 
+                //     // character: ['Anna'], 
+                // },
+                // // conditionMatch: 'every',
+                // conditionLocation: 'OPPOSITE',
+            },
         ],
         displayImage: 'displayImage simpleImage gameImage',
     },
