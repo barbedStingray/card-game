@@ -8,111 +8,113 @@ const dToons = [
     {
         id: 0,
         active: true,
-        character: 'Elsa',
-        color: 'Silver',
+        cardTitle: 'Scuttles Dinglehopper',
+        character: 'Scuttle',
+        color: 'Orange',
         points: 3,
+        kind: 'Bird',
+        gender: 'Male',
+        role: 'Sidekick',
         groups: [],
+        rarity: 'Mythic',
+        movie: 'The Little Mermaid',
+        displayImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725469394/dToons/theLittleMermaid/Scuttle/scuttle_simpleImage.png',
         abilities: [
             {
-                ability: '+3 for each Opponent Black Card',
+                ability: '+3 for each Red card in play',
                 abilityType: 'SCORE',
-                abilityOrigin: 'Elsa', // origin position of the ability - determines neighbors / locations... 
+                abilityOrigin: 'Scuttle', // origin position of the ability - determines neighbors / locations... 
                 
                 targets: { // not every target needs a condition. Targets are free.
-                    character: ['Elsa'],
+                    character: ['Scuttle'],
                 },
                 targetMatch: 'every',
                 targetLocation: 'SELF',
                 
                 conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
-                    color: ['Black'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
+                    color: ['Red'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
                 },
                 conditionMatch: 'every', // or every // this means it can match some of the conditionCategories, or ALL
-                conditionLocation: 'OPPONENT', // location check for conditions - Does this need to be an array?
+                conditionLocation: 'INPLAY', // location check for conditions - Does this need to be an array?
 
                 oneShot: false, // how many times the bonus should be applied
                 bonus: '3', // 1x doubles... 2x triples... 
             },
         ],
-        displayImage: 'displayImage simpleImage gameImage',
     },
     {
         id: 1,
         active: true,
-        character: 'Elsa',
+        cardTitle: 'Hooks Revenge',
+        character: 'Captain Hook',
         color: 'Black',
         points: 10,
-        groups: [],
-        abilities: [
-        ],
-        displayImage: 'displayImage simpleImage gameImage',
+        kind: 'Human',
+        gender: 'Male',
+        role: 'Villain',
+        groups: ['Pirate'],
+        rarity: 'Rare',
+        movie: 'Peter Pan',
+        displayImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725467792/dToons/PeterPan/CaptainHook/captainHook_simpleImage.png',
+        abilities: [],
     },
     {
         id: 2,
         active: true,
-        character: 'Anna', // null
-        color: 'Blue',
-        points: 8,
-        groups: ['Pirate', 'Animal', 'Queen'],
-        abilities: [
-            {
-                ability: 'Clone the opposing card',
-                abilityType: 'BOARD',
-                abilityOrigin: 'Anna', 
-                
-                boardSet: 'CLONE',
-                beenUsed: false,
-
-                targets: {
-                    character: ['Anna'],
-                },
-                // targetMatch: 'every',
-                targetLocation: 'SELF',
-
-                swapTarget: {
-                    // if condition exists...
-                },
-                // swapTargetMatch: 'every',
-                copyTargetLocation: 'OPPOSITE',
-
-                // conditions: { 
-                //     // character: ['Anna'], 
-                // },
-                // // conditionMatch: 'every',
-                // conditionLocation: 'OPPOSITE',
-            },
-        ],
-        displayImage: 'displayImage simpleImage gameImage',
+        cardTitle: 'Whistle While You Work',
+        character: 'Snow White',
+        color: 'Pink',
+        points: 9,
+        kind: 'Human',
+        gender: 'Female',
+        role: null,
+        groups: [],
+        rarity: 'Rare',
+        movie: 'Snow White',
+        displayImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725469443/dToons/SnowWhite/SnowWhite/snowWhite_simpleImage.png',
+        abilities: [],
     },
     {
         id: 3,
         active: true,
-        character: 'Morph',
-        color: 'Silver',
-        points: 1,
+        cardTitle: 'Ultimate Cosmic Power',
+        character: 'Jafar',
+        color: 'Black',
+        points: 4,
+        kind: 'Geenie',
+        gender: 'Male',
+        role: 'Villain',
         groups: [],
-        abilities: [
-        ],
-        displayImage: 'displayImage simpleImage gameImage',
+        rarity: 'Rare',
+        movie: 'Aladdin',
+        displayImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725468189/dToons/Aladdin/Jafar/jafar_simpleImage.png',
+        abilities: [],
     },
     {
         id: 4,
         active: true,
-        character: 'Olaf',
-        color: 'Silver',
-        points: 4,
+        cardTitle: 'Quick Escape',
+        character: 'Magic Carpet',
+        color: 'Yellow',
+        points: 6,
+        kind: 'Item',
+        gender: 'Neutral',
+        role: 'Sidekick',
         groups: [],
+        rarity: 'Epic',
+        movie: 'Aladdin',
+        displayImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725469612/dToons/Aladdin/MagicCarpet/magicCarpet_simpleImage.png',
         abilities: [
             {
                 ability: 'Swap Places with the opposing card',
                 abilityType: 'BOARD',
-                abilityOrigin: 'Olaf', 
+                abilityOrigin: 'Magic Carpet', 
                 
                 boardSet: 'SWAP',
                 beenUsed: false,
 
                 targets: {
-                    character: ['Olaf'],
+                    character: ['Magic Carpet'],
                 },
                 // targetMatch: 'every',
                 targetLocation: 'SELF',
@@ -130,88 +132,77 @@ const dToons = [
                 // conditionLocation: 'OPPOSITE',
             },
         ],
-        displayImage: 'displayImage simpleImage gameImage',
     },
     {
         id: 5,
         active: true,
+        cardTitle: 'Poor Souls',
         character: 'Ursula',
         color: 'Black',
-        points: 10,
-        groups: [],
-        abilities: [
-            {
-                ability: 'Negates Opposing Cards abilities',
-                abilityType: 'BOARD',
-                abilityOrigin: 'Ursula', 
-                
-                boardSet: 'NEGATE',
-                beenUsed: false,
-
-                targets: {
-                    character: ['Ursula'],
-                },
-                // targetMatch: 'every',
-                targetLocation: 'SELF',
-
-                swapTarget: {
-                    // if condition exists...
-                },
-                // swapTargetMatch: 'every',
-                negateTargetLocation: 'OPPOSITE',
-
-                // conditions: { 
-                //     // character: ['Anna'], 
-                // },
-                // // conditionMatch: 'every',
-                // conditionLocation: 'OPPOSITE',
-            },
-        ],
-        displayImage: 'displayImage simpleImage gameImage',
+        points: 9,
+        kind: 'Mermaid',
+        gender: 'Female',
+        role: 'Villain',
+        groups: ['Witch'],
+        rarity: 'Rare',
+        movie: 'The Little Mermaid',
+        displayImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725468189/dToons/theLittleMermaid/Ursula/ursula_simpleImage.png',
+        abilities: [],
     },
     {
         id: 6,
         active: true,
-        character: 'Kristoff',
-        color: 'Blue',
-        points: 5,
-        groups: ['Music', 'Princess'],
-        abilities: [
-        ],
-        displayImage: 'displayImage simpleImage gameImage',
+        cardTitle: 'What about the Monkeys?',
+        character: 'Jane Porter',
+        color: 'White',
+        points: 3,
+        kind: 'Human',
+        gender: 'Female',
+        role: null,
+        groups: ['Explorer', 'Scientist'],
+        rarity: 'Common',
+        movie: 'Tarzan',
+        displayImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725469887/dToons/Tarzan/JanePorter/janePorter_simpleImage.png',
+        abilities: [],
     },
     {
         id: 7,
         active: true,
-        character: 'Gaston',
+        cardTitle: 'Saving a Spot',
+        character: 'Yzma',
         color: 'Black',
-        points: 10,
-        groups: [],
+        points: 2,
+        kind: 'Human',
+        gender: 'Female',
+        role: 'Villain',
+        groups: ['Scientist'],
+        rarity: 'Rare',
+        movie: 'The Emperors New Groove',
+        displayImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725467968/dToons/theEmperorsNewGroove/Yzma/yzma_simpleImage.png',
         abilities: [
             {
-                ability: '+10 if this card is played last',
+                ability: '+5 if this card is played last',
                 abilityType: 'SCORE',
-                abilityOrigin: 'Gaston', // origin position of the ability - determines neighbors / locations... 
+                abilityOrigin: 'Yzma', // origin position of the ability - determines neighbors / locations... 
                 
                 targets: { // not every target needs a condition. Targets are free.
-                    character: ['Gaston'],
+                    character: ['Yzma'],
                 },
                 targetMatch: 'every',
                 targetLocation: 'SELF',
                 
                 conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
-                    character: ['Gaston'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
+                    character: ['Yzma'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
                 },
                 conditionMatch: 'every', // or every // this means it can match some of the conditionCategories, or ALL
                 conditionLocation: 'LAST', // location check for conditions - Does this need to be an array?
 
                 oneShot: true, // how many times the bonus should be applied
-                bonus: '10', // 1x doubles... 2x triples... 
+                bonus: '5', // 1x doubles... 2x triples... 
             },
-
         ],
-        displayImage: 'displayImage simpleImage gameImage',
     },
+    
 ]
 
 

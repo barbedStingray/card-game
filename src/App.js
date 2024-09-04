@@ -36,7 +36,7 @@ function App() {
 
 
   function beginScoringRound(boardSlots) {
-    console.log('begin Scoring Round', boardSlots)
+    console.log(`begin ${gameCount} Round`, boardSlots)
 
     // ! Identify active cards
     const activeBoardSlots = identifyInactiveCards(boardSlots)
@@ -78,14 +78,23 @@ function App() {
           {myToons.map((dtoon, i) => (
             <div className='dToonCard' key={i}>
               {dtoon ? (
-                <div style={{ color: dtoon.active ? '' : 'red' }}>
-                  <p>{dtoon.character}</p>
-                  <p>{dtoon.color} {dtoon.points} {dtoon.kind}</p>
-                  <p>{dtoon.groups}</p>
+                <>
+                <div className='dToonDiv' style={{ color: dtoon.active ? '' : 'red' }}>
+                  <img className='toonImage' src={dtoon.displayImage} />
+                  <div>
+                    <p>{dtoon.character}</p>
+                    <p>{dtoon.color} {dtoon.points} {dtoon.kind}</p>
+                    <p>{dtoon.groups}</p>
+                    <p>{dtoon.gender}</p>
+                    <p>{dtoon.role}</p>
+                    <p>{dtoon.rarity}</p>
+                    <p>{dtoon.movie}</p>
+                  </div>
+                </div>
                   {dtoon.abilities.map((ability, i) => (
                     <p key={i}>{ability.ability}</p>
                   ))}
-                </div>
+                </>
               ) : (
                 <p>EMPTY SLOT</p>
               )}
@@ -97,14 +106,23 @@ function App() {
           {opponentToons.map((dtoon, i) => (
             <div className='dToonCard' key={i}>
               {dtoon ? (
-                <div style={{ color: dtoon.active ? '' : 'red' }}>
-                  <p>{dtoon.character}</p>
-                  <p>{dtoon.color} {dtoon.points} {dtoon.kind}</p>
-                  <p>{dtoon.groups}</p>
+                <>
+                <div className='dToonDiv' style={{ color: dtoon.active ? '' : 'red' }}>
+                  <img className='toonImage' src={dtoon.displayImage} />
+                  <div>
+                    <p>{dtoon.character}</p>
+                    <p>{dtoon.color} {dtoon.points} {dtoon.kind}</p>
+                    <p>{dtoon.groups}</p>
+                    <p>{dtoon.gender}</p>
+                    <p>{dtoon.role}</p>
+                    <p>{dtoon.rarity}</p>
+                    <p>{dtoon.movie}</p>
+                  </div>
+                </div>
                   {dtoon.abilities.map((ability, i) => (
                     <p key={i}>{ability.ability}</p>
                   ))}
-                </div>
+                </>
               ) : (
                 <p>EMPTY SLOT</p>
               )}

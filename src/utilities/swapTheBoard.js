@@ -63,30 +63,32 @@ function cloneCardAbility(boardSlots, ability, abilityOriginIndex) {
     return cloneSlotsChange
 }
 
-function negateCardAbility(boardSlots, ability, abilityOriginIndex) {
-    console.log('negating a card ability', abilityOriginIndex)
+// function negateCardAbility(boardSlots, ability, abilityOriginIndex) {
+//     console.log('negating a card ability', abilityOriginIndex)
 
-    const negateAbilityChange = [...boardSlots]
-    // find target of ability
-    console.log('targetLocation', ability.negateTargetLocation)
-    const negateLocation = locationTree[ability.negateTargetLocation][abilityOriginIndex]
-    // negate the abilities
-    const negateToon = negateAbilityChange[negateLocation]
-    console.log('negateToon', negateToon)
+//     const negateAbilityChange = [...boardSlots]
+//     // find target of ability
+//     console.log('targetLocation', ability.negateTargetLocation)
+//     const negateLocation = locationTree[ability.negateTargetLocation][abilityOriginIndex]
+//     // negate the abilities
+//     const negateToon = negateAbilityChange[negateLocation]
+//     console.log('negateToon', negateToon)
 
-    // still need to negate abilities...
-    // but even negated... the swap toon ability is already in line to activate...
-    // thinking i'm going to need to run through them one at a time somehow? 
-    // if some abilities trigger others or some stop others, they cant be queued... 
+//     // still need to negate abilities...
+//     // but even negated... the swap toon ability is already in line to activate...
+//     // thinking i'm going to need to run through them one at a time somehow? 
+//     // if some abilities trigger others or some stop others, they cant be queued... 
 
-    return negateAbilityChange
-}
+//     return negateAbilityChange
+// }
+
 
 
 const boardChangingTree = {
     'SWAP': swapCardAbility,
     'CLONE': cloneCardAbility,
-    'NEGATE': negateCardAbility,
+    // 'NEGATE': negateCardAbility,
+
     // more abilities here
 }
 
@@ -100,11 +102,18 @@ export default function swapTheBoard(boardSlots) {
     // console.log('activeToons', activeToons)
     const toonAbilities = activeToons.map((toon) => toon.abilities).flat()
     // console.log('toonAbilities', toonAbilities)
+
+    // ! This is the initial list of abilities... loop this?
     const allBoardAbilities = toonAbilities.filter((ability) => ability.abilityType === 'BOARD').reverse() // include used/unused abilities here? 
     console.log('allBoardAbilities', allBoardAbilities) // reversed so order is from most recent
 
     let newBoardSlots = [...boardSlots]
 
+
+    // evaluate one at a time. Then Re-evaluate the board? 
+
+
+    // this has to change so that each ability is played, then a new set of abilities is generated...
     allBoardAbilities.forEach((ability) => {
         console.log('FOR EACH', ability.ability)
 
@@ -114,9 +123,8 @@ export default function swapTheBoard(boardSlots) {
         const abilityFunction = boardChangingTree[ability.boardSet]
 
         if (abilityFunction) {
-            const adjustedBoardSlots = abilityFunction(newBoardSlots, ability, abilityOriginIndex)
-            console.log('setting new board slots-', adjustedBoardSlots)
-            newBoardSlots = adjustedBoardSlots
+            newBoardSlots = abilityFunction(newBoardSlots, ability, abilityOriginIndex)
+            console.log('setting new board slots-', newBoardSlots)
         } 
         else {
             console.log('no ability function identified')

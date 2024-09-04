@@ -17,10 +17,10 @@
 }
 
 .gameBoard {
-  /* border: 2px solid magenta; */
+  border: 2px solid magenta;
   display: flex;
   flex-flow: row nowrap;
-  height: 60vh;
+  height: 85vh;
 }
 
 .gameside, .deckside {
@@ -33,9 +33,21 @@
 
 .dToonCard {
   border: 2px solid black;
+  display: flex;
+  flex-flow: column nowrap;
   flex: 1;
 }
 
 .red {
   color: red;
+}
+
+.dToonDiv {
+  display: flex;
+  flex-flow: row nowrap;
+}
+.toonImage {
+  border: 1px solid grey;
+  width: 150px;
+  height: 150px;
 }
