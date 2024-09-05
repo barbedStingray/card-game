@@ -11,13 +11,16 @@ function App() {
   const [gameCount, setGameCount] = useState(0)
   const [toonOrderArray, setToonOrderArray] = useState(dToons)
 
-  const [boardSlots, setBoardSlots] = useState(Array(14).fill(null))
+  const [boardSlots, setBoardSlots] = useState(Array(8).fill(null))
+
   const [boardScore, setBoardScore] = useState(0)
   const [myToonScore, setMyToonScore] = useState(0)
+  const [myToonBonus, setMyToonBonus] = useState(0)
   const [opponentScore, setOpponentScore] = useState(0)
+  const [opponentBonus, setOpponentBonus] = useState(0)
 
-  const [myToons, setMyToons] = useState(boardSlots.filter((_, i) => i % 2 === 0))
-  const [opponentToons, setOpponentToons] = useState(boardSlots.filter((_, i) => i % 2 !== 0))
+  
+
 
 
 
@@ -28,8 +31,6 @@ function App() {
     newBoardSlots[gameCount] = toonOrderArray[gameCount]
 
     setBoardSlots(newBoardSlots)
-    setMyToons(newBoardSlots.filter((_, i) => i % 2 === 0))
-    setOpponentToons(newBoardSlots.filter((_, i) => i % 2 !== 0))
     setGameCount(gameCount + 1)
   }
 
@@ -42,21 +43,20 @@ function App() {
     const activeBoardSlots = identifyInactiveCards(boardSlots)
     console.log('activeBoardSlots', activeBoardSlots)
     setBoardSlots(activeBoardSlots)
-    setMyToons(activeBoardSlots.filter((_, i) => i % 2 === 0))
-    setOpponentToons(activeBoardSlots.filter((_, i) => i % 2 !== 0))
 
 
     // ! swap the board
     const newPositionBoardSlots = swapTheBoard(activeBoardSlots)
     console.log('newPositionBoardSlots', newPositionBoardSlots)
     setBoardSlots(newPositionBoardSlots)
-    setMyToons(newPositionBoardSlots.filter((_, i) => i % 2 === 0))
-    setOpponentToons(newPositionBoardSlots.filter((_, i) => i % 2 !== 0))
 
 
     // ! Score the board...
     const entireBoardScore = scoreTheBoard(newPositionBoardSlots)
     console.log('ENTIRE BOARD SCORE ARRAY', entireBoardScore)
+    setBoardScore(entireBoardScore) // this should finish it.
+
+    // ! ? ??? adjust/set your variables? 
     const newMyToonScore = entireBoardScore.reduce((sum, x, i) => { return i % 2 === 0 ? sum + x : sum }, 0)
     const newOpponentScore = entireBoardScore.reduce((sum, x, i) => i % 2 !== 0 ? sum + x : sum, 0)
     setMyToonScore(newMyToonScore)
@@ -76,11 +76,14 @@ function App() {
 
       <div className='gameBoard'>
 
-        <div className='opponentLayout'>
-          {opponentToons.map((slot, index) => (
+        <div className='cardLayout opponentLayout'>
+          {boardSlots.filter((_, i) => i % 2 === 0).map((slot, index) => (
             <div className="spot" key={index}>
               {slot ? (
-                <img className='boardImage' src={slot.displayImage} alt={`Card ${index}`} />
+                <>
+                  <p>{slot.points + slot.bonusPoints}</p>
+                  <img className='boardImage' src={slot.displayImage} alt={`Card ${index}`} />
+                </>
               ) : (
                 <p>No current Card</p>
               )}
@@ -99,11 +102,14 @@ function App() {
           <h1>{opponentScore}</h1>
         </div>
 
-        <div className='playerLayout'>
-          {myToons.map((slot, index) => (
+        <div className='cardLayout playerLayout'>
+          {boardSlots.filter((_, i) => i % 2 !== 0).map((slot, index) => (
             <div className="spot" key={index}>
               {slot ? (
-                <img className='boardImage' src={slot.displayImage} alt={`Card ${index}`} />
+                <>
+                  <p>{slot.points + slot.bonusPoints}</p>
+                  <img className='boardImage' src={slot.displayImage} alt={`Card ${index}`} />
+                </>
               ) : (
                 <p>No current Card</p>
               )}
@@ -113,8 +119,6 @@ function App() {
 
       </div>
 
-
-      <div className='infoAndDeck'></div>
 
 
     </div>

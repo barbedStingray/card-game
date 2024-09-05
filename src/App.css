@@ -12,11 +12,6 @@
   flex-flow: row nowrap;
 }
 
-.infoAndDeck {
-  border: 2px solid orangered;
-  flex: 1;
-}
-
 
 .gameBoard {
   border: 2px solid magenta;
@@ -32,40 +27,32 @@
   flex: 1;
   justify-content: center;
 }
-.playerLayout {
-  border: 2px solid red;
-  flex: 5;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-}
-/* .opponentLayout {
-  border: 2px solid red;
-  flex: 5;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-} */
 
-/* MAKE A BIGGER GRID 12X?? AND DESIGNATE AREAS TO EACH CARD... */
-.opponentLayout {
+/* board layout! */
+.cardLayout {
   border: 2px solid red;
   flex: 5;
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 columns */
-  grid-template-rows: 1fr 1fr; /* 2 rows of equal height */
-  grid-template-areas:
-    "back1 back2 back3 empty"
-    "front1 front2 front3 front4";
-  gap: 10px; /* Optional: spacing between items */
+  grid-template-columns: repeat(16, 1fr);
+  grid-template-rows: repeat(2, 1fr);
 }
-.opponentLayout .spot:nth-child(1) { grid-area: front1; }
-.opponentLayout .spot:nth-child(2) { grid-area: front2; }
-.opponentLayout .spot:nth-child(3) { grid-area: front3; }
-.opponentLayout .spot:nth-child(4) { grid-area: front4; }
-.opponentLayout .spot:nth-child(5) { grid-area: back1; }
-.opponentLayout .spot:nth-child(6) { grid-area: back2; }
-.opponentLayout .spot:nth-child(7) { grid-area: back3; }
+.playerLayout {
+  grid-template-areas:
+  "f1 f1 f1 f1 f2 f2 f2 f2 f3 f3 f3 f3 f4 f4 f4 f4"
+  "e1 e2 b1 b1 b1 b1 b2 b2 b2 b2 b3 b3 b3 b3 e3 e4";
+}
+.opponentLayout {
+  grid-template-areas:
+  "e1 e2 b1 b1 b1 b1 b2 b2 b2 b2 b3 b3 b3 b3 e3 e4"
+  "f1 f1 f1 f1 f2 f2 f2 f2 f3 f3 f3 f3 f4 f4 f4 f4";
+}
+.cardLayout, .spot:nth-child(1) { grid-area: f1; }
+.cardLayout .spot:nth-child(2) { grid-area: f2; }
+.cardLayout .spot:nth-child(3) { grid-area: f3; }
+.cardLayout .spot:nth-child(4) { grid-area: f4; }
+.cardLayout .spot:nth-child(5) { grid-area: b1; }
+.cardLayout .spot:nth-child(6) { grid-area: b2; }
+.cardLayout .spot:nth-child(7) { grid-area: b3; }
 
 .spot {
   border: 1px solid black;
@@ -80,40 +67,3 @@
   height: 100%;
   width: 100%;
 }
-
-/* 
-.gameBoard {
-  border: 2px solid magenta;
-  display: flex;
-  flex-flow: row nowrap;
-  height: 85vh;
-}
-
-.gameside, .deckside {
-  border: 2px solid blue;
-  display: flex;
-  flex-flow: column nowrap;
-  flex: 1;
-  text-align: center;
-}
-
-.dToonCard {
-  border: 2px solid black;
-  display: flex;
-  flex-flow: column nowrap;
-  flex: 1;
-}
-
-.red {
-  color: red;
-}
-
-.dToonDiv {
-  display: flex;
-  flex-flow: row nowrap;
-}
-.toonImage {
-  border: 1px solid grey;
-  width: 150px;
-  height: 150px;
-} */

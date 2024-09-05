@@ -27,9 +27,10 @@ export default function scoreTheBoard(boardSlots) {
         .filter((ability) => ability.abilityType === 'SCORE')
     // console.log('allScoringAbilities', allScoringAbilities)
 
-    // ! INITIAL go over each dToon one by one // I want an array of points
-    const boardTotal = activeInPlayBoardSlots.map((dToon, index) => {
+    // ! INITIAL go over each dToon one by one // I want an array of toons with adjusted points
+    const adjustedBoardToons = activeInPlayBoardSlots.map((dToon, index) => {
         // console.log(`SCORING dToon... ${dToon.character}`, dToon)
+        if (!dToon) return null
         const dToonIndex = index
 
         // ! loop through each ability in play (this is inside each dToon)
@@ -109,11 +110,16 @@ export default function scoreTheBoard(boardSlots) {
             return (oneShot ? newBonus : newBonus * countSatisfaction) + abilityTotal
         }, 0)
 
-        // console.log(`${dToon.character} addtionalPoints`, additionalPoints)
+        // update dToon points OR bonus points
+        console.log(dToon.bonusPoints, additionalPoints)
+        dToon.bonusPoints = additionalPoints 
         console.log(`${dToonIndex}-${dToon?.character ?? null} pointValue: ${dToon?.points ?? null} extra: ${additionalPoints}`)
-        return (dToon?.points ?? 0) + additionalPoints
+        return dToon
     })
-    return boardTotal
+
+    console.log('adjustedBoardToons', adjustedBoardToons)
+    // return boardTotal
+    return adjustedBoardToons
 }
 
 

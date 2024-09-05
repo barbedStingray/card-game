@@ -12,6 +12,7 @@ const dToons = [
         character: 'Scuttle',
         color: 'Orange',
         points: 3,
+        bonusPoints: 0,
         kind: 'Bird',
         gender: 'Male',
         role: 'Sidekick',
@@ -21,7 +22,7 @@ const dToons = [
         displayImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725469394/dToons/theLittleMermaid/Scuttle/scuttle_simpleImage.png',
         abilities: [
             {
-                ability: '+3 for each Red card in play',
+                ability: '+3 for each Pink card in play',
                 abilityType: 'SCORE',
                 abilityOrigin: 'Scuttle', // origin position of the ability - determines neighbors / locations... 
                 
@@ -32,7 +33,7 @@ const dToons = [
                 targetLocation: 'SELF',
                 
                 conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
-                    color: ['Red'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
+                    color: ['Pink'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
                 },
                 conditionMatch: 'every', // or every // this means it can match some of the conditionCategories, or ALL
                 conditionLocation: 'INPLAY', // location check for conditions - Does this need to be an array?
@@ -49,6 +50,7 @@ const dToons = [
         character: 'Captain Hook',
         color: 'Black',
         points: 10,
+        bonusPoints: 0,
         kind: 'Human',
         gender: 'Male',
         role: 'Villain',
@@ -65,6 +67,7 @@ const dToons = [
         character: 'Snow White',
         color: 'Pink',
         points: 9,
+        bonusPoints: 0,
         kind: 'Human',
         gender: 'Female',
         role: null,
@@ -81,6 +84,7 @@ const dToons = [
         character: 'Jafar',
         color: 'Black',
         points: 4,
+        bonusPoints: 0,
         kind: 'Geenie',
         gender: 'Male',
         role: 'Villain',
@@ -97,6 +101,7 @@ const dToons = [
         character: 'Magic Carpet',
         color: 'Yellow',
         points: 6,
+        bonusPoints: 0,
         kind: 'Item',
         gender: 'Neutral',
         role: 'Sidekick',
@@ -140,6 +145,7 @@ const dToons = [
         character: 'Ursula',
         color: 'Black',
         points: 9,
+        bonusPoints: 0,
         kind: 'Mermaid',
         gender: 'Female',
         role: 'Villain',
@@ -156,6 +162,7 @@ const dToons = [
         character: 'Jane Porter',
         color: 'White',
         points: 3,
+        bonusPoints: 0,
         kind: 'Human',
         gender: 'Female',
         role: null,
@@ -172,6 +179,7 @@ const dToons = [
         character: 'Yzma',
         color: 'Black',
         points: 2,
+        bonusPoints: 0,
         kind: 'Human',
         gender: 'Female',
         role: 'Villain',
