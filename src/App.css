@@ -55,15 +55,25 @@
 .cardLayout .spot:nth-child(7) { grid-area: b3; }
 
 .spot {
-  border: 1px solid black;
+  border: 3px solid black;
   background-color: #dbfeff;
   width: 20vh;
   height: 20vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 .boardImage {
   height: 100%;
   width: 100%;
 }
+.toonScore {
+  /* border: 2px solid magenta; */
+  color: grey;
+  position: absolute;
+  right: 16px;
+  top: 8px;
+  font-size: 4vh;
+}
+

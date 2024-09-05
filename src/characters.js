@@ -22,7 +22,7 @@ const dToons = [
         displayImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725469394/dToons/theLittleMermaid/Scuttle/scuttle_simpleImage.png',
         abilities: [
             {
-                ability: '+3 for each Pink card in play',
+                ability: '+2 for each Black card in play',
                 abilityType: 'SCORE',
                 abilityOrigin: 'Scuttle', // origin position of the ability - determines neighbors / locations... 
                 
@@ -33,7 +33,7 @@ const dToons = [
                 targetLocation: 'SELF',
                 
                 conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
-                    color: ['Pink'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
+                    color: ['Black'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
                 },
                 conditionMatch: 'every', // or every // this means it can match some of the conditionCategories, or ALL
                 conditionLocation: 'INPLAY', // location check for conditions - Does this need to be an array?
@@ -71,7 +71,7 @@ const dToons = [
         kind: 'Human',
         gender: 'Female',
         role: null,
-        groups: [],
+        groups: ['Princess'],
         rarity: 'Rare',
         movie: 'Snow White',
         displayImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725469443/dToons/SnowWhite/SnowWhite/snowWhite_simpleImage.png',
@@ -92,7 +92,28 @@ const dToons = [
         rarity: 'Rare',
         movie: 'Aladdin',
         displayImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725468189/dToons/Aladdin/Jafar/jafar_simpleImage.png',
-        abilities: [],
+        abilities: [
+            {
+                ability: '-5 to the Opposing card if Princess',
+                abilityType: 'SCORE',
+                abilityOrigin: 'Jafar', // origin position of the ability - determines neighbors / locations... 
+                
+                targets: { // not every target needs a condition. Targets are free.
+                    // groups: ['Royalty'],
+                },
+                targetMatch: 'every',
+                targetLocation: 'OPPOSITE',
+                
+                conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
+                    groups: ['Princess'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
+                },
+                conditionMatch: 'every', // or every // this means it can match some of the conditionCategories, or ALL
+                conditionLocation: 'OPPOSITE', // location check for conditions - Does this need to be an array?
+
+                oneShot: true, // how many times the bonus should be applied
+                bonus: '-5', // 1x doubles... 2x triples... 
+            },
+        ],
     },
     {
         id: 4,
@@ -178,7 +199,7 @@ const dToons = [
         cardTitle: 'Saving a Spot',
         character: 'Yzma',
         color: 'Black',
-        points: 2,
+        points: 7,
         bonusPoints: 0,
         kind: 'Human',
         gender: 'Female',

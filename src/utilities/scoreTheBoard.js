@@ -15,8 +15,6 @@ const bucketTree = {
 // todo gain points for having the most / least points? 
 
 
-
-
 export default function scoreTheBoard(boardSlots) {
     console.log('scoring Board', boardSlots)
     const activeInPlayBoardSlots = boardSlots.map((slot) => (slot?.active ?? false) ? slot : null)
@@ -110,15 +108,12 @@ export default function scoreTheBoard(boardSlots) {
             return (oneShot ? newBonus : newBonus * countSatisfaction) + abilityTotal
         }, 0)
 
-        // update dToon points OR bonus points
-        console.log(dToon.bonusPoints, additionalPoints)
         dToon.bonusPoints = additionalPoints 
-        console.log(`${dToonIndex}-${dToon?.character ?? null} pointValue: ${dToon?.points ?? null} extra: ${additionalPoints}`)
+        console.log(`${dToonIndex}-${dToon?.character ?? null} pointValue: ${dToon?.points ?? null} extra: ${dToon.bonusPoints}`)
         return dToon
     })
 
     console.log('adjustedBoardToons', adjustedBoardToons)
-    // return boardTotal
     return adjustedBoardToons
 }
 

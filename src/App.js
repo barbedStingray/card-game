@@ -12,56 +12,48 @@ function App() {
   const [toonOrderArray, setToonOrderArray] = useState(dToons)
 
   const [boardSlots, setBoardSlots] = useState(Array(8).fill(null))
-
   const [boardScore, setBoardScore] = useState(0)
   const [myToonScore, setMyToonScore] = useState(0)
-  const [myToonBonus, setMyToonBonus] = useState(0)
   const [opponentScore, setOpponentScore] = useState(0)
-  const [opponentBonus, setOpponentBonus] = useState(0)
-
-  
 
 
 
-
-  function placeCardIntoPlay() {
-    console.log('placing card into play', gameCount)
-
-    const newBoardSlots = [...boardSlots]
-    newBoardSlots[gameCount] = toonOrderArray[gameCount]
-
-    setBoardSlots(newBoardSlots)
-    setGameCount(gameCount + 1)
-  }
-
-
-
-  function beginScoringRound(boardSlots) {
+  function introduceAnotherCard(boardSlots) {
     console.log(`begin ${gameCount} Round`, boardSlots)
 
+    // ! Play a card...
+    const playCardSlots = [...boardSlots]
+    playCardSlots[gameCount] = toonOrderArray[gameCount]
+    setBoardSlots(playCardSlots)
+    setGameCount(gameCount + 1)
+    console.log('newCardSlots', playCardSlots)
+
     // ! Identify active cards
-    const activeBoardSlots = identifyInactiveCards(boardSlots)
+    const activeBoardSlots = identifyInactiveCards(playCardSlots)
     console.log('activeBoardSlots', activeBoardSlots)
     setBoardSlots(activeBoardSlots)
-
 
     // ! swap the board
     const newPositionBoardSlots = swapTheBoard(activeBoardSlots)
     console.log('newPositionBoardSlots', newPositionBoardSlots)
-    setBoardSlots(newPositionBoardSlots)
-
+    setTimeout(() => {
+      setBoardSlots(newPositionBoardSlots)
+    }, 1000)
 
     // ! Score the board...
-    const entireBoardScore = scoreTheBoard(newPositionBoardSlots)
-    console.log('ENTIRE BOARD SCORE ARRAY', entireBoardScore)
-    setBoardScore(entireBoardScore) // this should finish it.
+    setTimeout(() => {
+      const newScoringSlots = scoreTheBoard(newPositionBoardSlots);
+      console.log('newScoringSlots', newScoringSlots);
 
-    // ! ? ??? adjust/set your variables? 
-    const newMyToonScore = entireBoardScore.reduce((sum, x, i) => { return i % 2 === 0 ? sum + x : sum }, 0)
-    const newOpponentScore = entireBoardScore.reduce((sum, x, i) => i % 2 !== 0 ? sum + x : sum, 0)
-    setMyToonScore(newMyToonScore)
-    setOpponentScore(newOpponentScore)
-    setBoardScore(entireBoardScore.reduce((sum, x) => sum + x, 0))
+      // ! set scoring
+      const opponentPointsScore = newScoringSlots.map((toon) => toon?.points || 0).reduce((sum, x, i) => (i % 2 === 0 ? sum + x : sum), 0);
+      const opponentBonusScore = newScoringSlots.map((toon) => toon?.bonusPoints || 0).reduce((sum, x, i) => (i % 2 === 0 ? sum + x : sum), 0);
+      const myToonScore = newScoringSlots.map((toon) => toon?.points || 0).reduce((sum, x, i) => (i % 2 !== 0 ? sum + x : sum), 0);
+      const myToonBonusScore = newScoringSlots.map((toon) => toon?.bonusPoints || 0).reduce((sum, x, i) => (i % 2 !== 0 ? sum + x : sum), 0);
+      setMyToonScore(myToonScore + myToonBonusScore);
+      setOpponentScore(opponentPointsScore + opponentBonusScore);
+      setBoardScore(myToonScore + myToonBonusScore + opponentPointsScore + opponentBonusScore);
+    }, 1000);
   }
 
 
@@ -81,7 +73,9 @@ function App() {
             <div className="spot" key={index}>
               {slot ? (
                 <>
-                  <p>{slot.points + slot.bonusPoints}</p>
+                  <p className='toonScore'>
+                      {slot.points + slot.bonusPoints}
+                  </p>
                   <img className='boardImage' src={slot.displayImage} alt={`Card ${index}`} />
                 </>
               ) : (
@@ -92,8 +86,8 @@ function App() {
         </div>
 
         <div className='scoreBoard'>
-          <button onClick={() => placeCardIntoPlay(boardSlots)}>PLACE</button>
-          <button onClick={() => beginScoringRound(boardSlots)}>PLAY</button>
+          {/* <button onClick={() => placeCardIntoPlay(boardSlots)}>PLACE</button> */}
+          <button onClick={() => introduceAnotherCard(boardSlots)}>PLAY</button>
           <p>Total</p>
           <h1>{boardScore}</h1>
           <p>My Score</p>
@@ -107,7 +101,9 @@ function App() {
             <div className="spot" key={index}>
               {slot ? (
                 <>
-                  <p>{slot.points + slot.bonusPoints}</p>
+                  <p className='toonScore'>
+                      {slot.points + slot.bonusPoints}
+                  </p>
                   <img className='boardImage' src={slot.displayImage} alt={`Card ${index}`} />
                 </>
               ) : (
