@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import './App.css'
 import dToons from './characters.js'
 
@@ -17,12 +17,13 @@ function App() {
   const [opponentScore, setOpponentScore] = useState(0)
 
 
-  // !? IS THIS WHAT I WANT?
-  const [previousRoundScore, setPreviousRoundScore] = useState([]);
-  console.log('PREVIOUS ROUND', previousRoundScore)
-
-
   const [pointValueStates, setPointValueStates] = useState({})
+  const [previousRoundScore, setPreviousRoundScore] = useState([])
+  const previousToons = useRef(boardSlots)
+  console.log('USEREF', previousToons.current)
+
+
+
 
   function valueChange(toonID) {
     console.log('the value is changing at', toonID)
@@ -40,6 +41,7 @@ function App() {
 
   function introduceAnotherCard(boardSlots) {
     console.log(`begin ${gameCount} Round`, boardSlots)
+  
 
 
     // ! Play a card...
@@ -56,8 +58,6 @@ function App() {
     setBoardSlots(activeBoardSlots)
 
 
-
-
     // ! swap the board
     const newPositionBoardSlots = swapTheBoard(activeBoardSlots)
     console.log('newPositionBoardSlots', newPositionBoardSlots)
@@ -66,53 +66,44 @@ function App() {
     }, 1000)
 
 
-
     // ! Score the board...
-    // setTimeout(() => {
-    const newScoringSlots = scoreTheBoard(newPositionBoardSlots);
-    console.log('newScoringSlots', newScoringSlots);
+      const newScoringSlots = scoreTheBoard(newPositionBoardSlots)
+      console.log('newScoringSlots', newScoringSlots)
 
+      // handle active point changes
+      newScoringSlots.forEach((toon, index) => {
+        if (!toon) {
+          console.log('no toon in spot')
+          return
+        }
+        console.log('BONUS toon', toon)
+        const currentToonScore = toon.points + toon.bonusPoints
+        const previousScore = (previousRoundScore[index]?.points + previousRoundScore[index]?.bonusPoints) || 0
+        const previousREF = (previousToons.current[index]?.points + previousToons.current[index]?.bonusPoints) || 0
+        console.log('currentToonScore', currentToonScore)
+        console.log('previousScore', previousScore)
+        console.log('previousREF', previousREF)
+        const hasToonChangedValue = currentToonScore !== previousScore
+        console.log('hasToonChangedValue', hasToonChangedValue)
+        if (hasToonChangedValue) {
+          console.log('toon has changed in point value')
+          valueChange(toon.id)
+        }
+      })
 
+      // ! set scoring
+      const opponentPointsScore = newScoringSlots.map((toon) => toon?.points || 0).reduce((sum, x, i) => (i % 2 === 0 ? sum + x : sum), 0)
+      const opponentBonusScore = newScoringSlots.map((toon) => toon?.bonusPoints || 0).reduce((sum, x, i) => (i % 2 === 0 ? sum + x : sum), 0)
+      const myToonScore = newScoringSlots.map((toon) => toon?.points || 0).reduce((sum, x, i) => (i % 2 !== 0 ? sum + x : sum), 0)
+      const myToonBonusScore = newScoringSlots.map((toon) => toon?.bonusPoints || 0).reduce((sum, x, i) => (i % 2 !== 0 ? sum + x : sum), 0)
+      setMyToonScore(myToonScore + myToonBonusScore)
+      setOpponentScore(opponentPointsScore + opponentBonusScore)
+      setBoardScore(myToonScore + myToonBonusScore + opponentPointsScore + opponentBonusScore)
 
-    // handle active point changes
-    newScoringSlots.forEach((toon, index) => {
-      if (!toon) {
-        console.log('no toon in spot')
-        return
-      }
-      console.log('BONUS toon', toon)
-      console.log('toonPoints', toon?.points + toon?.bonusPoints)
-      const previousScore = (previousRoundScore[index]?.points + previousRoundScore[index]?.bonusPoints) || 0;
-      console.log('previousScore', previousScore)
-      const hasToonChangedValue = toon.points + toon.bonusPoints !== previousScore
-      console.log('hasToonChangedValue', hasToonChangedValue)
-      if (hasToonChangedValue) {
-        console.log('toon has changed in point value')
-        valueChange(toon?.id)
-      }
-    })
-
-
-
-
-    // ! set scoring
-    const opponentPointsScore = newScoringSlots.map((toon) => toon?.points || 0).reduce((sum, x, i) => (i % 2 === 0 ? sum + x : sum), 0);
-    const opponentBonusScore = newScoringSlots.map((toon) => toon?.bonusPoints || 0).reduce((sum, x, i) => (i % 2 === 0 ? sum + x : sum), 0);
-    const myToonScore = newScoringSlots.map((toon) => toon?.points || 0).reduce((sum, x, i) => (i % 2 !== 0 ? sum + x : sum), 0);
-    const myToonBonusScore = newScoringSlots.map((toon) => toon?.bonusPoints || 0).reduce((sum, x, i) => (i % 2 !== 0 ? sum + x : sum), 0);
-    setMyToonScore(myToonScore + myToonBonusScore);
-    setOpponentScore(opponentPointsScore + opponentBonusScore);
-    setBoardScore(myToonScore + myToonBonusScore + opponentPointsScore + opponentBonusScore);
-
-
-    // }, 1000)
-
+      setPreviousRoundScore(newScoringSlots)
+      previousToons.current = newScoringSlots
 
   }
-
-
-
-
 
 
 
