@@ -77,3 +77,6 @@
   font-size: 4vh;
 }
 
+.active {
+  color: red;
+}
