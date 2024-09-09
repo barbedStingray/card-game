@@ -1,10 +1,11 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import './App.css'
 import dToons from './characters.js'
 
 import scoreTheBoard from './utilities/scoreTheBoard.js'
 import swapTheBoard from './utilities/swapTheBoard.js'
 import identifyInactiveCards from './utilities/identifyInactiveCards.js'
+import GameCard from './components/GameCard.jsx'
 
 function App() {
 
@@ -17,31 +18,11 @@ function App() {
   const [opponentScore, setOpponentScore] = useState(0)
 
 
-  const [pointValueStates, setPointValueStates] = useState({})
-  const [previousRoundScore, setPreviousRoundScore] = useState([])
-  const previousToons = useRef(boardSlots)
-  console.log('USEREF', previousToons.current)
-
-
-
-
-  function valueChange(toonID) {
-    console.log('the value is changing at', toonID)
-    setPointValueStates((prevState) => ({
-      ...prevState, [toonID]: true,
-    }))
-    setTimeout(() => {
-      setPointValueStates((prevState) => ({
-        ...prevState, [toonID]: false,
-      }))
-    }, 1000)
-  }
 
 
 
   function introduceAnotherCard(boardSlots) {
     console.log(`begin ${gameCount} Round`, boardSlots)
-  
 
 
     // ! Play a card...
@@ -61,35 +42,14 @@ function App() {
     // ! swap the board
     const newPositionBoardSlots = swapTheBoard(activeBoardSlots)
     console.log('newPositionBoardSlots', newPositionBoardSlots)
-    setTimeout(() => {
-      setBoardSlots(newPositionBoardSlots)
-    }, 1000)
+    setBoardSlots(newPositionBoardSlots)
 
 
     // ! Score the board...
+    setTimeout(() => {
+
       const newScoringSlots = scoreTheBoard(newPositionBoardSlots)
       console.log('newScoringSlots', newScoringSlots)
-
-      // handle active point changes
-      newScoringSlots.forEach((toon, index) => {
-        if (!toon) {
-          console.log('no toon in spot')
-          return
-        }
-        console.log('BONUS toon', toon)
-        const currentToonScore = toon.points + toon.bonusPoints
-        const previousScore = (previousRoundScore[index]?.points + previousRoundScore[index]?.bonusPoints) || 0
-        const previousREF = (previousToons.current[index]?.points + previousToons.current[index]?.bonusPoints) || 0
-        console.log('currentToonScore', currentToonScore)
-        console.log('previousScore', previousScore)
-        console.log('previousREF', previousREF)
-        const hasToonChangedValue = currentToonScore !== previousScore
-        console.log('hasToonChangedValue', hasToonChangedValue)
-        if (hasToonChangedValue) {
-          console.log('toon has changed in point value')
-          valueChange(toon.id)
-        }
-      })
 
       // ! set scoring
       const opponentPointsScore = newScoringSlots.map((toon) => toon?.points || 0).reduce((sum, x, i) => (i % 2 === 0 ? sum + x : sum), 0)
@@ -99,10 +59,7 @@ function App() {
       setMyToonScore(myToonScore + myToonBonusScore)
       setOpponentScore(opponentPointsScore + opponentBonusScore)
       setBoardScore(myToonScore + myToonBonusScore + opponentPointsScore + opponentBonusScore)
-
-      setPreviousRoundScore(newScoringSlots)
-      previousToons.current = newScoringSlots
-
+    }, 1000)
   }
 
 
@@ -115,18 +72,7 @@ function App() {
 
         <div className='cardLayout opponentLayout'>
           {boardSlots.filter((_, i) => i % 2 === 0).map((slot, index) => (
-            <div className="spot" key={index}>
-              {slot ? (
-                <>
-                  <p className={`toonScore ${pointValueStates[slot.id] ? 'active' : 'inactive'}`}>
-                    {slot.points + slot.bonusPoints}
-                  </p>
-                  <img className='boardImage' src={slot.displayImage} alt={`Card ${index}`} />
-                </>
-              ) : (
-                <p>No current Card</p>
-              )}
-            </div>
+            <GameCard slot={slot} key={index} />
           ))}
         </div>
 
@@ -142,18 +88,7 @@ function App() {
 
         <div className='cardLayout playerLayout'>
           {boardSlots.filter((_, i) => i % 2 !== 0).map((slot, index) => (
-            <div className="spot" key={index}>
-              {slot ? (
-                <>
-                  <p className={`toonScore ${pointValueStates[slot.id] ? 'active' : 'inactive'}`}>
-                    {slot.points + slot.bonusPoints}
-                  </p>
-                  <img className='boardImage' src={slot.displayImage} alt={`Card ${index}`} />
-                </>
-              ) : (
-                <p>No current Card</p>
-              )}
-            </div>
+            <GameCard slot={slot} key={index} />
           ))}
         </div>
 

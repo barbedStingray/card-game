@@ -105,7 +105,7 @@ export default function swapTheBoard(boardSlots) {
 
     // ! This is the initial list of abilities... loop this?
     const allBoardAbilities = toonAbilities.filter((ability) => ability.abilityType === 'BOARD').reverse() // include used/unused abilities here? 
-    console.log('allBoardAbilities', allBoardAbilities) // reversed so order is from most recent
+    // console.log('allBoardAbilities', allBoardAbilities) // reversed so order is from most recent
 
     let newBoardSlots = [...boardSlots]
 

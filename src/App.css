@@ -4,6 +4,19 @@
   box-sizing: border-box;
 }
 
+:root {
+  --toon-color-Red: red;
+  --toon-color-Blue: blue;
+  --toon-color-Yellow: yellow;
+  --toon-color-Green: green;
+  --toon-color-Orange: orange;
+  --toon-color-Purple: purple;
+  --toon-color-White: white;
+  --toon-color-Black: black;
+  --toon-color-Silver: rgb(205, 205, 205);
+  --toon-color-Pink: Pink;
+}
+
 .App {
   border: 2px solid greenyellow;
   width: 100vw;
@@ -18,9 +31,8 @@
   display: flex;
   flex-flow: column nowrap;
   flex: 2.5;
-  /* height: 100%;
-  width: 100%; */
 }
+
 .scoreBoard {
   border: 2px solid greenyellow;
   display: flex;
@@ -36,26 +48,50 @@
   grid-template-columns: repeat(16, 1fr);
   grid-template-rows: repeat(2, 1fr);
 }
+
 .playerLayout {
   grid-template-areas:
-  "f1 f1 f1 f1 f2 f2 f2 f2 f3 f3 f3 f3 f4 f4 f4 f4"
-  "e1 e2 b1 b1 b1 b1 b2 b2 b2 b2 b3 b3 b3 b3 e3 e4";
+    "f1 f1 f1 f1 f2 f2 f2 f2 f3 f3 f3 f3 f4 f4 f4 f4"
+    "e1 e2 b1 b1 b1 b1 b2 b2 b2 b2 b3 b3 b3 b3 e3 e4";
 }
+
 .opponentLayout {
   grid-template-areas:
-  "e1 e2 b1 b1 b1 b1 b2 b2 b2 b2 b3 b3 b3 b3 e3 e4"
-  "f1 f1 f1 f1 f2 f2 f2 f2 f3 f3 f3 f3 f4 f4 f4 f4";
+    "e1 e2 b1 b1 b1 b1 b2 b2 b2 b2 b3 b3 b3 b3 e3 e4"
+    "f1 f1 f1 f1 f2 f2 f2 f2 f3 f3 f3 f3 f4 f4 f4 f4";
 }
-.cardLayout, .spot:nth-child(1) { grid-area: f1; }
-.cardLayout .spot:nth-child(2) { grid-area: f2; }
-.cardLayout .spot:nth-child(3) { grid-area: f3; }
-.cardLayout .spot:nth-child(4) { grid-area: f4; }
-.cardLayout .spot:nth-child(5) { grid-area: b1; }
-.cardLayout .spot:nth-child(6) { grid-area: b2; }
-.cardLayout .spot:nth-child(7) { grid-area: b3; }
 
-.spot {
-  border: 3px solid black;
+.cardLayout,
+.gameCard-container:nth-child(1) {
+  grid-area: f1;
+}
+
+.cardLayout .gameCard-container:nth-child(2) {
+  grid-area: f2;
+}
+
+.cardLayout .gameCard-container:nth-child(3) {
+  grid-area: f3;
+}
+
+.cardLayout .gameCard-container:nth-child(4) {
+  grid-area: f4;
+}
+
+.cardLayout .gameCard-container:nth-child(5) {
+  grid-area: b1;
+}
+
+.cardLayout .gameCard-container:nth-child(6) {
+  grid-area: b2;
+}
+
+.cardLayout .gameCard-container:nth-child(7) {
+  grid-area: b3;
+}
+
+.gameCard-container {
+  /* border: 1px solid black; */
   background-color: #dbfeff;
   width: 20vh;
   height: 20vh;
@@ -64,17 +100,75 @@
   justify-content: center;
   position: relative;
 }
+
+.gameCard {
+  border: 2px solid black;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50%, #333, #333 60%, white 70%);
+  position: relative;
+}
+
+.gameCard-colorRing {
+  content: '';
+  /* display: block; ???? */
+  border: 1px solid black;
+  background: var(--toon-color-green);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 92%;
+  height: 92%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+
+.gameCard-imageMask {
+  border: 1px solid black;
+  background-color: #333;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  height: 80%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.gameCard-pointCircle {
+  border: 2px solid magenta;
+  background-color: #333;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40%;
+  height: 40%;
+  transform: translate(45%, -145%);
+  z-index: 20;
+}
+
+.toonScore {
+  /* border: 2px solid magenta; */
+  color: rgb(255, 255, 255);
+  font-size: 4vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+}
+
+
+
 .boardImage {
   height: 100%;
   width: 100%;
-}
-.toonScore {
-  /* border: 2px solid magenta; */
-  color: grey;
-  position: absolute;
-  right: 16px;
-  top: 8px;
-  font-size: 4vh;
 }
 
 .active {

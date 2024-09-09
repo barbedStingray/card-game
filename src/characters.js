@@ -20,6 +20,8 @@ const dToons = [
         rarity: 'Mythic',
         movie: 'The Little Mermaid',
         displayImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725469394/dToons/theLittleMermaid/Scuttle/scuttle_simpleImage.png',
+        noToonImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725904332/dToons/theEmperorsNewGroove/Yzma/Yzma_noToon.png',
+
         abilities: [
             {
                 ability: '+2 for each Black card in play',
@@ -208,6 +210,7 @@ const dToons = [
         rarity: 'Rare',
         movie: 'The Emperors New Groove',
         displayImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725467968/dToons/theEmperorsNewGroove/Yzma/yzma_simpleImage.png',
+        noToonImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725904332/dToons/theEmperorsNewGroove/Yzma/Yzma_noToon.png',
         abilities: [
             {
                 ability: '+5 if this card is played last',
