@@ -7,6 +7,12 @@ function swapCardAbility(boardSlots, ability, abilityOriginIndex) {
 
     const swapSlotsChange = [...boardSlots]
 
+    // ! check to see if ability is active
+    if (!ability.abilityInPlay) {
+        console.log('ability is not active')
+        return swapSlotsChange
+    }
+
     // ! identify indexes
     const firstSwapToonIndex = locationTree[ability.targetLocation][abilityOriginIndex][0]
     const secondSwapToonIndex = locationTree[ability.swapTargetLocation][abilityOriginIndex][0]
@@ -32,7 +38,7 @@ function swapCardAbility(boardSlots, ability, abilityOriginIndex) {
 function cloneCardAbility(boardSlots, ability, abilityOriginIndex) {
     console.log('ability is CLONE', abilityOriginIndex)
     // identify target / location
-    
+
     const cloneSlotsChange = [...boardSlots]
 
     const pasteLocationIndex = locationTree[ability.targetLocation][abilityOriginIndex]
@@ -63,74 +69,131 @@ function cloneCardAbility(boardSlots, ability, abilityOriginIndex) {
     return cloneSlotsChange
 }
 
-// function negateCardAbility(boardSlots, ability, abilityOriginIndex) {
-//     console.log('negating a card ability', abilityOriginIndex)
+function silenceCardAbility(boardSlots, ability, abilityOriginIndex) {
+    console.log('negating a card ability', abilityOriginIndex)
 
-//     const negateAbilityChange = [...boardSlots]
-//     // find target of ability
-//     console.log('targetLocation', ability.negateTargetLocation)
-//     const negateLocation = locationTree[ability.negateTargetLocation][abilityOriginIndex]
-//     // negate the abilities
-//     const negateToon = negateAbilityChange[negateLocation]
-//     console.log('negateToon', negateToon)
+    const silenceCardAbilityChange = [...boardSlots]
 
-//     // still need to negate abilities...
-//     // but even negated... the swap toon ability is already in line to activate...
-//     // thinking i'm going to need to run through them one at a time somehow? 
-//     // if some abilities trigger others or some stop others, they cant be queued... 
+    // todo check conditions to apply silence?
 
-//     return negateAbilityChange
-// }
+    // todo apply the silence to target card
+    // find target card...
+    console.log('abilityOriginIndex', abilityOriginIndex)
+    const cardsToSilenceIndex = locationTree[ability.targetLocation][abilityOriginIndex]
+    console.log('cardsToSilenceIndex', cardsToSilenceIndex)
+
+    const cardsToSilence = cardsToSilenceIndex.map((index) => silenceCardAbilityChange[index])
+    console.log('cardsToSilence', cardsToSilence)
+
+    const silencedCards = cardsToSilence.map((toon) => {
+        if (!toon) {
+            console.log('toon is null')
+            return null
+        }
+        console.log('silencing toon...', toon.character)
+
+        const updatedAbilities = toon.abilities.map((ability) => {
+            return {
+                ...ability,
+                abilityInPlay: false
+            }
+        })
+        console.log('updatedAbilities', updatedAbilities)
+
+        const updatedCardWithSilence = {
+            ...toon,
+            abilities: updatedAbilities
+        }
+        console.log('updatedCardWithSilence', updatedCardWithSilence)
+        return updatedCardWithSilence
+    })
+    console.log('silencedCards', silencedCards)
+
+    // replace the modified card in the array
+    cardsToSilenceIndex.forEach((index, i) => {
+        silenceCardAbilityChange[index] = silencedCards[i]
+    })
+    console.log('silenceCardAbilityChange', silenceCardAbilityChange)
+    // do not toggle, silence should be applied every round if its AoE / Would it matter with one?
+
+    return silenceCardAbilityChange
+}
 
 
 
 const boardChangingTree = {
     'SWAP': swapCardAbility,
     'CLONE': cloneCardAbility,
-    // 'NEGATE': negateCardAbility,
-
+    'SILENCE': silenceCardAbility,
     // more abilities here
 }
 
 
 
 export default function swapTheBoard(boardSlots) {
-    // console.log('affecting the board', boardSlots)
+    console.log('affecting the board', boardSlots)
 
+    // todo You need to determine the order of priority in which things are applied...
+    // 1. Protect
+    // 2. Silence
+    // 3. All others? 
 
     const activeToons = boardSlots.filter((toon) => toon?.active === true ?? false)
     // console.log('activeToons', activeToons)
     const toonAbilities = activeToons.map((toon) => toon.abilities).flat()
     // console.log('toonAbilities', toonAbilities)
 
-    // ! This is the initial list of abilities... loop this?
-    const allBoardAbilities = toonAbilities.filter((ability) => ability.abilityType === 'BOARD').reverse() // include used/unused abilities here? 
-    // console.log('allBoardAbilities', allBoardAbilities) // reversed so order is from most recent
+    // ! This is the initial list of active toon BOARD abilities...
+    const allActiveBoardAbilities = toonAbilities.filter((ability) => ability.abilityType !== 'SCORE').reverse() // include used/unused abilities here? 
+    console.log('allActiveBoardAbilities', allActiveBoardAbilities) // reversed so order is from most recent
 
-    let newBoardSlots = [...boardSlots]
+    // apply protect...
+
+    // apply silence...
+    // filter abilities for those that are silencing...
+    const allActiveSilenceAbilities = allActiveBoardAbilities.filter((ability) => ability.abilityType === 'SILENCE')
+    console.log('allActiveSilenceAbilities', allActiveSilenceAbilities)
+
+    let silencedCardsBoardSlots = [...boardSlots]
+    allActiveSilenceAbilities.forEach((ability) => {
+        console.log('silenceAbility', ability)
+        // if ability has been used return?
+        const abilityOriginIndex = silencedCardsBoardSlots.map((toon) => toon?.character ?? []).indexOf(ability.abilityOrigin)
+        silencedCardsBoardSlots = silenceCardAbility(silencedCardsBoardSlots, ability, abilityOriginIndex)
+    })
+
+    console.log('silencedCardsBoardSlots', silencedCardsBoardSlots)
+
+
+
+
+    // others...
+
+
+    let finalSwapBoardSlots = [...silencedCardsBoardSlots]
 
 
     // evaluate one at a time. Then Re-evaluate the board? 
 
 
     // this has to change so that each ability is played, then a new set of abilities is generated...
-    allBoardAbilities.forEach((ability) => {
+    allActiveBoardAbilities.forEach((ability) => {
         console.log('FOR EACH', ability.ability)
 
         if (ability.beenUsed) return
 
-        const abilityOriginIndex = newBoardSlots.map((toon) => toon?.character ?? []).indexOf(ability.abilityOrigin)
-        const abilityFunction = boardChangingTree[ability.boardSet]
+        const abilityOriginIndex = finalSwapBoardSlots.map((toon) => toon?.character ?? []).indexOf(ability.abilityOrigin)
+        const abilityFunction = boardChangingTree[ability.abilityType]
 
         if (abilityFunction) {
-            newBoardSlots = abilityFunction(newBoardSlots, ability, abilityOriginIndex)
-            console.log('setting new board slots-', newBoardSlots)
-        } 
+            finalSwapBoardSlots = abilityFunction(finalSwapBoardSlots, ability, abilityOriginIndex)
+            console.log('setting new board slots-', finalSwapBoardSlots)
+        }
         else {
             console.log('no ability function identified')
         }
     })
 
     // needs to return the array of board slots for scoring
-    return newBoardSlots
+    return finalSwapBoardSlots
 }

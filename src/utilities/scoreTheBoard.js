@@ -22,8 +22,9 @@ export default function scoreTheBoard(boardSlots) {
 
 
     const allScoringAbilities = activeInPlayBoardSlots.map((toon) => toon?.abilities ?? []).flat()
-        .filter((ability) => ability.abilityType === 'SCORE')
-    // console.log('allScoringAbilities', allScoringAbilities)
+        .filter((ability) => ability.abilityType === 'SCORE' && ability.abilityInPlay === true)
+    console.log('allScoringAbilities', allScoringAbilities)
+    // ! check if the ability is in play (hasn't been negated etc... (written in above))
 
     // ! INITIAL go over each dToon one by one // I want an array of toons with adjusted points
     const adjustedBoardToons = activeInPlayBoardSlots.map((dToon, index) => {

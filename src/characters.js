@@ -20,19 +20,19 @@ const dToons = [
         rarity: 'Mythic',
         movie: 'The Little Mermaid',
         noToonImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725469394/dToons/theLittleMermaid/Scuttle/scuttle_simpleImage.png',
-
         abilities: [
             {
                 ability: '+2 for each Black card in play',
                 abilityType: 'SCORE',
+                abilityInPlay: true,
                 abilityOrigin: 'Scuttle', // origin position of the ability - determines neighbors / locations... 
-                
+
                 targets: { // not every target needs a condition. Targets are free.
                     character: ['Scuttle'],
                 },
                 targetMatch: 'every',
                 targetLocation: 'SELF',
-                
+
                 conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
                     color: ['Black'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
                 },
@@ -49,7 +49,7 @@ const dToons = [
         active: true,
         cardTitle: 'Hooks Revenge',
         character: 'Captain Hook',
-        color: 'Black',
+        color: 'Red',
         points: 10,
         bonusPoints: 0,
         kind: 'Human',
@@ -59,7 +59,29 @@ const dToons = [
         rarity: 'Rare',
         movie: 'Peter Pan',
         noToonImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725467792/dToons/PeterPan/CaptainHook/captainHook_simpleImage.png',
-        abilities: [],
+        abilities: [
+            {
+                ability: 'Silences opposing Cards',
+                abilityType: 'SILENCE', // boardSet could be combined into this... abilityType !== 'SCORE'
+                abilityInPlay: true,
+                abilityOrigin: 'Captain Hook', 
+
+                // beenUsed: false, // this is not a one shot ability...
+                // ! target of the silence / all blue cards????
+                targets: { // not every target needs a condition. Targets are free.
+                
+                },
+                targetMatch: 'every',
+                targetLocation: 'OPPONENT',
+
+                // ! this would be used if the silence has a trigger...
+                // conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
+                //     color: ['Black'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
+                // },
+                // conditionMatch: 'every', // or every // this means it can match some of the conditionCategories, or ALL
+                // conditionLocation: 'INPLAY', // location check for conditions - Does this need to be an array?
+            },
+        ],
     },
     {
         id: 12,
@@ -97,14 +119,15 @@ const dToons = [
             {
                 ability: '-5 to the Opposing card if Princess',
                 abilityType: 'SCORE',
+                abilityInPlay: true,
                 abilityOrigin: 'Jafar', // origin position of the ability - determines neighbors / locations... 
-                
+
                 targets: { // not every target needs a condition. Targets are free.
                     // groups: ['Royalty'],
                 },
                 targetMatch: 'every',
                 targetLocation: 'OPPOSITE',
-                
+
                 conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
                     groups: ['Princess'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
                 },
@@ -134,10 +157,10 @@ const dToons = [
         abilities: [
             {
                 ability: 'Swap Places with the opposing card',
-                abilityType: 'BOARD',
-                abilityOrigin: 'Magic Carpet', 
-                
-                boardSet: 'SWAP',
+                abilityType: 'SWAP',
+                abilityInPlay: true,
+                abilityOrigin: 'Magic Carpet',
+
                 beenUsed: false,
 
                 targets: {
@@ -213,14 +236,15 @@ const dToons = [
             {
                 ability: '+5 if this card is played last',
                 abilityType: 'SCORE',
+                abilityInPlay: true,
                 abilityOrigin: 'Yzma', // origin position of the ability - determines neighbors / locations... 
-                
+
                 targets: { // not every target needs a condition. Targets are free.
                     character: ['Yzma'],
                 },
                 targetMatch: 'every',
                 targetLocation: 'SELF',
-                
+
                 conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
                     character: ['Yzma'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
                 },
@@ -232,7 +256,7 @@ const dToons = [
             },
         ],
     },
-    
+
 ]
 
 

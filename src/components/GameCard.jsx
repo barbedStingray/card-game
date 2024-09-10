@@ -8,7 +8,7 @@ const GameCard = ({ slot }) => {
     const toonColor = slot?.color ? `var(--toon-color-${slot.color})` : 'transparent'
 
     function displayValueChange() {
-        console.log('VALUE CHANGE for', slot?.character)
+        // console.log('VALUE CHANGE for', slot?.character)
         setValueChange(true)
         setTimeout(() => {
             setValueChange(false)
