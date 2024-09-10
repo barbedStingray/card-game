@@ -30,13 +30,13 @@ const dToons = [
                 targets: { // not every target needs a condition. Targets are free.
                     character: ['Scuttle'],
                 },
-                targetMatch: 'every',
+                targetMatch: 'every', // every and some
                 targetLocation: 'SELF',
 
                 conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
                     color: ['Black'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
                 },
-                conditionMatch: 'every', // or every // this means it can match some of the conditionCategories, or ALL
+                conditionMatch: 'every', // or some // this means it can match some of the conditionCategories, or ALL
                 conditionLocation: 'INPLAY', // location check for conditions - Does this need to be an array?
 
                 oneShot: false, // how many times the bonus should be applied
@@ -61,20 +61,19 @@ const dToons = [
         noToonImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725467792/dToons/PeterPan/CaptainHook/captainHook_simpleImage.png',
         abilities: [
             {
-                ability: 'Silences opposing Cards',
+                ability: 'Silences opposing Orange Card',
                 abilityType: 'SILENCE', // boardSet could be combined into this... abilityType !== 'SCORE'
                 abilityInPlay: true,
                 abilityOrigin: 'Captain Hook', 
 
                 // beenUsed: false, // this is not a one shot ability...
-                // ! target of the silence / all blue cards????
                 targets: { // not every target needs a condition. Targets are free.
-                
+                    color: 'Orange'
                 },
                 targetMatch: 'every',
-                targetLocation: 'OPPONENT',
+                targetLocation: 'OPPOSITE',
 
-                // ! this would be used if the silence has a trigger...
+                // ! this would be used if the silence has a trigger... could the trigger be itself?
                 // conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
                 //     color: ['Black'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
                 // },

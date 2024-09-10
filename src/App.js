@@ -19,7 +19,7 @@ function App() {
 
 
   function introduceAnotherCard(boardSlots) {
-    console.log(`begin ${gameCount} Round`, boardSlots)
+    // console.log(`begin ${gameCount} Round`, boardSlots)
 
 
     // ! Play a card...
@@ -27,18 +27,18 @@ function App() {
     playCardSlots[gameCount] = toonOrderArray[gameCount]
     setBoardSlots(playCardSlots)
     setGameCount(gameCount + 1)
-    console.log('newCardSlots', playCardSlots)
+    // console.log('newCardSlots', playCardSlots)
 
 
     // ! Identify active cards
     const activeBoardSlots = identifyInactiveCards(playCardSlots)
-    console.log('activeBoardSlots', activeBoardSlots)
+    // console.log('activeBoardSlots', activeBoardSlots)
     setBoardSlots(activeBoardSlots)
 
 
     // ! swap the board
     const newPositionBoardSlots = swapTheBoard(activeBoardSlots)
-    console.log('newPositionBoardSlots', newPositionBoardSlots)
+    // console.log('newPositionBoardSlots', newPositionBoardSlots)
     setTimeout(() => {
       setBoardSlots(newPositionBoardSlots)
     }, 1000);
@@ -48,7 +48,7 @@ function App() {
     setTimeout(() => {
 
       const newScoringSlots = scoreTheBoard(newPositionBoardSlots)
-      console.log('newScoringSlots', newScoringSlots)
+      // console.log('newScoringSlots', newScoringSlots)
 
       // ! set scoring
       const opponentPointsScore = newScoringSlots.map((toon) => toon?.points || 0).reduce((sum, x, i) => (i % 2 === 0 ? sum + x : sum), 0)
