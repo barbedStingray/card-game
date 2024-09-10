@@ -2,6 +2,7 @@
 import locationTree from './locationTree.js'
 import assessTargetLocation from './checkpoints/assessTargetLocation.js'
 import assessTargetConditions from './checkpoints/assessTargetConditions.js'
+import assessAbilityConditions from './checkpoints/assessAbilityConditions.js'
 
 function swapCardAbility(boardSlots, ability, abilityOriginIndex) {
     console.log('ability is swap', abilityOriginIndex)
@@ -73,11 +74,9 @@ function cloneCardAbility(boardSlots, ability, abilityOriginIndex) {
 function silenceCardAbility(boardSlots, ability, abilityOriginIndex) {
     console.log('silencing a card ability origin-', abilityOriginIndex)
 
-    const silenceCardAbilityChange = [...boardSlots]
 
-    // todo check conditions to apply silence?
-    // you need the target index... you need to assess each toon against each ability for silence to apply...
-    const benToonArray = silenceCardAbilityChange.map((toon, index) => {
+    // map over each toon and see if the abilitie applies to that toon, exactly like in scoring...
+    const silencedBoardSlots = boardSlots.map((toon, index) => {
         console.log('index', index)
 
         if (!toon) {
@@ -86,7 +85,7 @@ function silenceCardAbility(boardSlots, ability, abilityOriginIndex) {
         }
 
         // ! check if dToon is in target Location
-        const isTargetInLocation = assessTargetLocation(ability, silenceCardAbilityChange, index)
+        const isTargetInLocation = assessTargetLocation(ability, boardSlots, index)
         console.log('isTargetInLocation', isTargetInLocation)
         if (!isTargetInLocation) {
             console.log('Potential Target is NOT in Location', ability.ability)
@@ -101,40 +100,17 @@ function silenceCardAbility(boardSlots, ability, abilityOriginIndex) {
             return toon
         }
 
-        // todo check if conditions are met
-
-
-        // todo make the swap and return the new toon to the overall array...
-
-
-
-
-
-
-
-
-        return toon
-    })
-    console.log('benToonArray', benToonArray)
-    // todo eventually you'll return your new map of toons after the silence
-
-
-    // todo apply the silence to target card
-    // find target card...
-    console.log('abilityOriginIndex', abilityOriginIndex)
-    const cardsToSilenceIndex = locationTree[ability.targetLocation][abilityOriginIndex]
-    console.log('cardsToSilenceIndex', cardsToSilenceIndex)
-
-    const cardsToSilence = cardsToSilenceIndex.map((index) => silenceCardAbilityChange[index])
-    console.log('cardsToSilence', cardsToSilence)
-
-    const silencedCards = cardsToSilence.map((toon) => {
-        if (!toon) {
-            console.log('toon is null')
-            return null
+        // ! check if the ability conditions are met
+        const countSatisfaction = assessAbilityConditions(ability, boardSlots)
+        console.log('countSatisfaction', countSatisfaction)
+        if (countSatisfaction === 0) {
+            console.log(ability.ability, 'condition not met')
+            return toon
         }
-        console.log('silencing toon...', toon.character)
 
+        // apply whatever to toon based on something? 
+
+        // silence
         const updatedAbilities = toon.abilities.map((ability) => {
             return {
                 ...ability,
@@ -143,23 +119,17 @@ function silenceCardAbility(boardSlots, ability, abilityOriginIndex) {
         })
         console.log('updatedAbilities', updatedAbilities)
 
-        const updatedCardWithSilence = {
+        const silencedToon = {
             ...toon,
             abilities: updatedAbilities
         }
-        console.log('updatedCardWithSilence', updatedCardWithSilence)
-        return updatedCardWithSilence
-    })
-    console.log('silencedCards', silencedCards)
+        console.log('silencedToon', silencedToon)
 
-    // replace the modified card in the array
-    cardsToSilenceIndex.forEach((index, i) => {
-        silenceCardAbilityChange[index] = silencedCards[i]
+        return silencedToon 
     })
-    console.log('silenceCardAbilityChange', silenceCardAbilityChange)
-    // do not toggle, silence should be applied every round if its AoE / Would it matter with one?
+    console.log('silencedBoardSlots', silencedBoardSlots)
 
-    return silenceCardAbilityChange
+    return silencedBoardSlots
 }
 
 
@@ -177,11 +147,6 @@ const boardChangingTree = { // hierarchy
 
 export default function swapTheBoard(boardSlots) {
     console.log('swapTheBoard-', boardSlots)
-
-    // todo You need to determine the order of priority in which things are applied...
-    // 1. Protect
-    // 2. Silence
-    // 3. All others? 
 
     const activeToons = boardSlots.filter((toon) => toon?.active === true ?? false)
     // console.log('activeToons', activeToons)

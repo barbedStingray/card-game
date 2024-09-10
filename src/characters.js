@@ -49,7 +49,7 @@ const dToons = [
         active: true,
         cardTitle: 'Hooks Revenge',
         character: 'Captain Hook',
-        color: 'Red',
+        color: 'Black',
         points: 10,
         bonusPoints: 0,
         kind: 'Human',
@@ -73,12 +73,11 @@ const dToons = [
                 targetMatch: 'every',
                 targetLocation: 'OPPOSITE',
 
-                // ! this would be used if the silence has a trigger... could the trigger be itself?
-                // conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
-                //     color: ['Black'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
-                // },
-                // conditionMatch: 'every', // or every // this means it can match some of the conditionCategories, or ALL
-                // conditionLocation: 'INPLAY', // location check for conditions - Does this need to be an array?
+                conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
+                    character: ['Yzma'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
+                },
+                conditionMatch: 'every', // or every // this means it can match some of the conditionCategories, or ALL
+                conditionLocation: 'INPLAY', // location check for conditions - Does this need to be an array?
             },
         ],
     },

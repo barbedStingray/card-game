@@ -11,13 +11,13 @@ const bucketTree = {
 
 
 export default function assessAbilityConditions(ability, boardSlots) {
-    console.log('assessing ability conditions')
+    console.log('assessing ability conditions', ability.ability)
 
     const { conditions, conditionLocation, conditionMatch, abilityOrigin } = ability
     const abilityOriginIndex = boardSlots.map((toon) => toon?.character ?? null).indexOf(abilityOrigin)
 
     const identifyConditionIndices = locationTree[conditionLocation]?.[abilityOriginIndex]
-    // console.log('identifyConditionIndices', identifyConditionIndices)
+    console.log('identifyConditionIndices', identifyConditionIndices)
 
     const isConditionSatisfiedBySameCard = identifyConditionIndices.map((position) => {
         const categories = Object.keys(conditions)
@@ -38,6 +38,9 @@ export default function assessAbilityConditions(ability, boardSlots) {
         })
     })
 
-        return isConditionSatisfiedBySameCard
+    const countSatisfaction = isConditionSatisfiedBySameCard.filter(Boolean).length
+    // const isConditionSatisfied = countSatisfaction > 0
+    // console.log('isConditionSatisfied', isConditionSatisfied)
+    return countSatisfaction
 
 }
