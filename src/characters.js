@@ -74,7 +74,7 @@ const dToons = [
                 targetLocation: 'OPPOSITE',
 
                 conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
-                    character: ['Yzma'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
+                    character: ['Jafar'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
                 },
                 conditionMatch: 'every', // or every // this means it can match some of the conditionCategories, or ALL
                 conditionLocation: 'INPLAY', // location check for conditions - Does this need to be an array?

@@ -10,7 +10,7 @@ const bucketTree = {
 
 
 export default function assessTargetConditions(ability, dToon) {
-    console.log('assessing target conditions', dToon.character, ability.ability)
+    // console.log('assessing target conditions', dToon.character, ability.ability)
     const { targets, targetMatch } = ability
     const targetCategories = Object.keys(targets)
 

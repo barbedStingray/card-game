@@ -71,40 +71,40 @@ function cloneCardAbility(boardSlots, ability, abilityOriginIndex) {
     return cloneSlotsChange
 }
 
-function silenceCardAbility(boardSlots, ability, abilityOriginIndex) {
-    console.log('silencing a card ability origin-', abilityOriginIndex)
+function silenceCardAbility(boardSlots, ability) {
+    console.log('silencing a card ability ability-', ability.ability)
 
 
     // map over each toon and see if the abilitie applies to that toon, exactly like in scoring...
     const silencedBoardSlots = boardSlots.map((toon, index) => {
-        console.log('index', index)
+        // console.log('index', index)
 
         if (!toon) {
-            console.log('no Toon here')
+            // console.log('no Toon here')
             return null
         }
 
         // ! check if dToon is in target Location
         const isTargetInLocation = assessTargetLocation(ability, boardSlots, index)
-        console.log('isTargetInLocation', isTargetInLocation)
+        // console.log('isTargetInLocation', isTargetInLocation)
         if (!isTargetInLocation) {
-            console.log('Potential Target is NOT in Location', ability.ability)
+            // console.log('Potential Target is NOT in Location', ability.ability)
             return toon
         }
 
         // ! check if dToon meets target satisfaction (target conditions)
         const isTargetSatisfied = assessTargetConditions(ability, toon)
-        console.log('isTargetSatisfied?', isTargetSatisfied)
+        // console.log('isTargetSatisfied?', isTargetSatisfied)
         if (!isTargetSatisfied) {
-            console.log(toon.character, 'is not a target of', ability.ability)
+            // console.log(toon.character, 'is not a target of', ability.ability)
             return toon
         }
 
         // ! check if the ability conditions are met
         const countSatisfaction = assessAbilityConditions(ability, boardSlots)
-        console.log('countSatisfaction', countSatisfaction)
+        // console.log('countSatisfaction', countSatisfaction)
         if (countSatisfaction === 0) {
-            console.log(ability.ability, 'condition not met')
+            // console.log(ability.ability, 'condition not met')
             return toon
         }
 
@@ -117,17 +117,17 @@ function silenceCardAbility(boardSlots, ability, abilityOriginIndex) {
                 abilityInPlay: false
             }
         })
-        console.log('updatedAbilities', updatedAbilities)
+        // console.log('updatedAbilities', updatedAbilities)
 
         const silencedToon = {
             ...toon,
             abilities: updatedAbilities
         }
-        console.log('silencedToon', silencedToon)
+        // console.log('silencedToon', silencedToon)
 
-        return silencedToon 
+        return silencedToon
     })
-    console.log('silencedBoardSlots', silencedBoardSlots)
+    // console.log('silencedBoardSlots', silencedBoardSlots)
 
     return silencedBoardSlots
 }
@@ -157,23 +157,20 @@ export default function swapTheBoard(boardSlots) {
     const allActiveBoardAbilities = toonAbilities.filter((ability) => ability.abilityType !== 'SCORE').reverse() // include used/unused abilities here? 
     // console.log('allActiveBoardAbilities', allActiveBoardAbilities) // reversed so order is from most recent
 
-    // apply protect...
+    // update protect...
 
-    // apply silence...
+    // update silence...
     // filter abilities for those that are silencing...
     const allActiveSilenceAbilities = allActiveBoardAbilities.filter((ability) => ability.abilityType === 'SILENCE')
-    console.log('allActiveSilenceAbilities', allActiveSilenceAbilities)
+    // console.log('allActiveSilenceAbilities', allActiveSilenceAbilities)
+
 
     let silencedCardsBoardSlots = [...boardSlots]
-
     allActiveSilenceAbilities.forEach((ability) => {
-        console.log('silenceAbility', ability)
-        // if ability has been used return?
-        const abilityOriginIndex = silencedCardsBoardSlots.map((toon) => toon?.character ?? []).indexOf(ability.abilityOrigin)
-        silencedCardsBoardSlots = silenceCardAbility(silencedCardsBoardSlots, ability, abilityOriginIndex)
+        // console.log('silenceAbility', ability)
+        silencedCardsBoardSlots = silenceCardAbility(silencedCardsBoardSlots, ability)
     })
-
-    console.log('silencedCardsBoardSlots', silencedCardsBoardSlots)
+    console.log('silencedCards OLD n BUSTED', silencedCardsBoardSlots)
 
 
 
@@ -189,7 +186,7 @@ export default function swapTheBoard(boardSlots) {
 
     // this has to change so that each ability is played, then a new set of abilities is generated...
     allActiveBoardAbilities.forEach((ability) => {
-        console.log('FOR EACH', ability.ability)
+        // console.log('FOR EACH', ability.ability)
 
         if (ability.beenUsed) return
 
@@ -198,10 +195,10 @@ export default function swapTheBoard(boardSlots) {
 
         if (abilityFunction) {
             finalSwapBoardSlots = abilityFunction(finalSwapBoardSlots, ability, abilityOriginIndex)
-            console.log('setting new board slots-', finalSwapBoardSlots)
+            // console.log('setting new board slots-', finalSwapBoardSlots)
         }
         else {
-            console.log('no ability function identified')
+            // console.log('no ability function identified')
         }
     })
 
