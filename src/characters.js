@@ -19,8 +19,7 @@ const dToons = [
         groups: [],
         rarity: 'Mythic',
         movie: 'The Little Mermaid',
-        displayImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725469394/dToons/theLittleMermaid/Scuttle/scuttle_simpleImage.png',
-        noToonImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725904332/dToons/theEmperorsNewGroove/Yzma/Yzma_noToon.png',
+        noToonImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725469394/dToons/theLittleMermaid/Scuttle/scuttle_simpleImage.png',
 
         abilities: [
             {
@@ -59,7 +58,7 @@ const dToons = [
         groups: ['Pirate'],
         rarity: 'Rare',
         movie: 'Peter Pan',
-        displayImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725467792/dToons/PeterPan/CaptainHook/captainHook_simpleImage.png',
+        noToonImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725467792/dToons/PeterPan/CaptainHook/captainHook_simpleImage.png',
         abilities: [],
     },
     {
@@ -76,7 +75,7 @@ const dToons = [
         groups: ['Princess'],
         rarity: 'Rare',
         movie: 'Snow White',
-        displayImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725469443/dToons/SnowWhite/SnowWhite/snowWhite_simpleImage.png',
+        noToonImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725469443/dToons/SnowWhite/SnowWhite/snowWhite_simpleImage.png',
         abilities: [],
     },
     {
@@ -93,7 +92,7 @@ const dToons = [
         groups: [],
         rarity: 'Rare',
         movie: 'Aladdin',
-        displayImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725468189/dToons/Aladdin/Jafar/jafar_simpleImage.png',
+        noToonImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725468189/dToons/Aladdin/Jafar/jafar_simpleImage.png',
         abilities: [
             {
                 ability: '-5 to the Opposing card if Princess',
@@ -131,7 +130,7 @@ const dToons = [
         groups: [],
         rarity: 'Epic',
         movie: 'Aladdin',
-        displayImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725469612/dToons/Aladdin/MagicCarpet/magicCarpet_simpleImage.png',
+        noToonImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725469612/dToons/Aladdin/MagicCarpet/magicCarpet_simpleImage.png',
         abilities: [
             {
                 ability: 'Swap Places with the opposing card',
@@ -175,7 +174,7 @@ const dToons = [
         groups: ['Witch'],
         rarity: 'Rare',
         movie: 'The Little Mermaid',
-        displayImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725468189/dToons/theLittleMermaid/Ursula/ursula_simpleImage.png',
+        noToonImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725468189/dToons/theLittleMermaid/Ursula/ursula_simpleImage.png',
         abilities: [],
     },
     {
@@ -192,7 +191,7 @@ const dToons = [
         groups: ['Explorer', 'Scientist'],
         rarity: 'Common',
         movie: 'Tarzan',
-        displayImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725469887/dToons/Tarzan/JanePorter/janePorter_simpleImage.png',
+        noToonImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725469887/dToons/Tarzan/JanePorter/janePorter_simpleImage.png',
         abilities: [],
     },
     {
@@ -209,8 +208,7 @@ const dToons = [
         groups: ['Scientist'],
         rarity: 'Rare',
         movie: 'The Emperors New Groove',
-        displayImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725467968/dToons/theEmperorsNewGroove/Yzma/yzma_simpleImage.png',
-        noToonImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725904332/dToons/theEmperorsNewGroove/Yzma/Yzma_noToon.png',
+        noToonImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725467968/dToons/theEmperorsNewGroove/Yzma/yzma_simpleImage.png',
         abilities: [
             {
                 ability: '+5 if this card is played last',

@@ -10,15 +10,30 @@ import GameCard from './components/GameCard.jsx'
 function App() {
 
   const [gameCount, setGameCount] = useState(0)
-  const [toonOrderArray, setToonOrderArray] = useState(dToons)
+  const [toonOrderArray, setToonOrderArray] = useState([])
+
+  const [myDeck, setMyDeck] = useState(dToons.filter((_, i) => i % 2 !== 0))
+  const [opponentDeck, setOpponentDeck] = useState(dToons.filter((_, i) => i % 2 === 0))
 
   const [boardSlots, setBoardSlots] = useState(Array(8).fill(null))
   const [boardScore, setBoardScore] = useState(0)
   const [myToonScore, setMyToonScore] = useState(0)
   const [opponentScore, setOpponentScore] = useState(0)
 
+  // adding them one by one to be swapped and scored
 
 
+  function combinedToonArray(myToons, opponentToons) {
+    console.log('combining toons', myToons, opponentToons)
+    const theRoundToonArray = []
+    for(let i = 0; i <= 3; i++) {
+      console.log('this is', i)
+      theRoundToonArray.push(opponentDeck[i])
+      theRoundToonArray.push(myToons[i])
+    }
+    console.log('THE NEW ARRAY', theRoundToonArray)
+    setToonOrderArray(theRoundToonArray)
+  }
 
 
   function introduceAnotherCard(boardSlots) {
@@ -42,7 +57,9 @@ function App() {
     // ! swap the board
     const newPositionBoardSlots = swapTheBoard(activeBoardSlots)
     console.log('newPositionBoardSlots', newPositionBoardSlots)
-    setBoardSlots(newPositionBoardSlots)
+    setTimeout(() => {
+      setBoardSlots(newPositionBoardSlots)
+    }, 1000);
 
 
     // ! Score the board...
@@ -77,6 +94,7 @@ function App() {
         </div>
 
         <div className='scoreBoard'>
+          <button onClick={() => combinedToonArray(myDeck, opponentDeck)}>READY</button>
           <button onClick={() => introduceAnotherCard(boardSlots)}>PLAY</button>
           <p>Total</p>
           <h1>{boardScore}</h1>
