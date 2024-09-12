@@ -1,20 +1,6 @@
-
-import locationTree from './locationTree.js'
 import assessTargetLocation from './checkpoints/assessTargetLocation.js'
 import assessTargetConditions from './checkpoints/assessTargetConditions.js'
 import assessAbilityConditions from './checkpoints/assessAbilityConditions.js'
-
-// own imports for buckets and lists...
-const animalBucket = ['Bug', 'Dog', 'Lion', 'Bear', 'Gorilla', 'Meerekat', 'Warthog', 'Monkey']
-const royaltyBucket = ['King', 'Queen', 'Prince', 'Princess']
-const bucketTree = {
-    'Animal': animalBucket,
-    'Royalty': royaltyBucket,
-}
-
-
-// Ideas for further scoring updates...
-// todo gain points for having the most / least points? 
 
 
 export default function scoreTheBoard(boardSlots) {
@@ -23,9 +9,10 @@ export default function scoreTheBoard(boardSlots) {
     // console.log('activeInPlayBoardSlots', activeInPlayBoardSlots)
 
 
-    const allScoringAbilities = activeInPlayBoardSlots.map((toon) => toon?.abilities ?? []).flat()
+    // ! adjust this to account for silenced abilities
+    const allScoringAbilities = activeInPlayBoardSlots.filter((toon) => toon?.cardStatus.isSilenced === false).map((toon) => toon?.abilities ?? []).flat()
         .filter((ability) => ability.abilityType === 'SCORE') // make sure it hasent been silenced
-    // console.log('allScoringAbilities', allScoringAbilities)
+    console.log('allScoringAbilities', allScoringAbilities)
 
     // ! INITIAL go over each dToon one by one // I want an array of toons with adjusted points
     const adjustedBoardToons = activeInPlayBoardSlots.map((dToon, index) => {
@@ -34,14 +21,6 @@ export default function scoreTheBoard(boardSlots) {
         const dToonIndex = index
 
         const additionalPoints = allScoringAbilities.reduce((abilityTotal, ability) => {
-            // console.log('looping through Abilities:', ability.ability)
-
-            // todo if ability is silenced, return abilityTotal... ??
-            if (dToon.cardStatus.isSilenced) {
-                console.log('SILENCE', ability.ability)
-                return abilityTotal
-            } 
-
             // ! Check if dToon is inside target location
             const isTargetInLocation = assessTargetLocation(ability, activeInPlayBoardSlots, dToonIndex)
             if (!isTargetInLocation) {
@@ -62,6 +41,7 @@ export default function scoreTheBoard(boardSlots) {
                 // console.log(ability.ability, 'condition not met')
                 return abilityTotal
             }
+
 
             // ! Checks all passed, apply bonus
             const { oneShot, bonus } = ability
@@ -84,3 +64,9 @@ export default function scoreTheBoard(boardSlots) {
     console.log('adjustedBoardToons', adjustedBoardToons)
     return adjustedBoardToons
 }
+
+
+
+// Ideas for further scoring updates...
+// todo gain points for having the most / least points? 
+

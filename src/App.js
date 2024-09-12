@@ -44,57 +44,16 @@ function App() {
 
 
 
-
-
-    // ! swap the board
-    // apply protect
-    const activeProtectAbilities = activeBoardSlots.filter((toon) => toon?.isActive === true).map((slot) => slot?.abilities)
-      .flat().filter((ability) => ability?.abilityType === 'PROTECT')
-
-    const protectedCards = activeBoardSlots.map((dToon, index) => {
-      if (!dToon) return null
-      if (activeProtectAbilities.length === 0) return { ...dToon, cardStatus: { ...dToon.cardStatus, isProtected: false } }
-
-      const cardIsProtected = activeProtectAbilities.some((ability) => {
-        console.log(dToon.character, 'checking conditions', ability.ability)
-        const isTargetInLocation = assessTargetLocation(ability, activeBoardSlots, index)
-        if (!isTargetInLocation) {
-          return false
-        }
-        const isTargetSatisfied = assessTargetConditions(ability, dToon)
-        if (!isTargetSatisfied) {
-          return false
-        }
-        const countSatisfaction = assessAbilityConditions(ability, activeBoardSlots)
-        if (countSatisfaction === 0) { // or less than??
-          return false
-        }
-        return true
-      })
-      console.log(dToon.character, 'is being protected', cardIsProtected)
-      // switch to true 'PROTECT' to the dToon card Status
-
-      return cardIsProtected ?
-        { ...dToon, cardStatus: { ...dToon.cardStatus, isProtected: true } }
-        : { ...dToon, cardStatus: { ...dToon.cardStatus, isProtected: false } }
-    })
-    console.log('protectedCards', protectedCards)
-    setBoardSlots(protectedCards)
-
-
-
-    // todo apply silence
-    const activeSilenceAbilities = protectedCards.filter((toon) => toon?.isActive === true).map((slot) => slot?.abilities)
-      .flat().filter((ability) => ability?.abilityType === 'SILENCE')
+    // apply silence FIRST
+    const activeSilenceAbilities = activeBoardSlots.filter((toon) => toon?.isActive === true && toon?.cardStatus.isSilenced === false)
+      .map((slot) => slot?.abilities).flat().filter((ability) => ability?.abilityType === 'SILENCE')
     console.log('activeSilenceAbilities', activeSilenceAbilities)
 
-    const silencedCards = protectedCards.map((dToon, index) => {
+    const silencedCards = activeBoardSlots.map((dToon, index) => {
       if (!dToon) return null
       if (activeSilenceAbilities.length === 0) return { ...dToon, cardStatus: { ...dToon.cardStatus, isSilenced: false } }
-      
 
       const cardIsSilenced = activeSilenceAbilities.some((ability) => {
-        console.log(dToon.character, 'checking', ability.ability)
         const isTargetInLocation = assessTargetLocation(ability, activeBoardSlots, index)
         if (!isTargetInLocation) {
           return false
@@ -109,14 +68,49 @@ function App() {
         }
         return true
       })
-      console.log(dToon.character, 'attempted silenced', cardIsSilenced)
       return cardIsSilenced ?
         { ...dToon, cardStatus: { ...dToon.cardStatus, isSilenced: true } }
         : { ...dToon, cardStatus: { ...dToon.cardStatus, isSilenced: false } }
-
     })
     console.log('silencedCards', silencedCards)
-    setBoardSlots(silencedCards)
+
+    // maybe protected should be last, and make exceptions? 
+    // apply protect SECOND, make exceptions...
+    const activeProtectAbilities = silencedCards.filter((toon) => toon?.isActive === true && toon?.cardStatus.isSilenced === false)
+      .map((slot) => slot?.abilities).flat().filter((ability) => ability?.abilityType === 'PROTECT')
+    // console.log('activeProtectAbilities', activeProtectAbilities)
+
+    const protectedCards = silencedCards.map((dToon, index) => {
+      if (!dToon) return null
+      if (activeProtectAbilities.length === 0) return { ...dToon, cardStatus: { ...dToon.cardStatus, isProtected: false } }
+
+      const cardIsProtected = activeProtectAbilities.some((ability) => {
+        // console.log(dToon.character, 'checking conditions', ability.ability)
+        const isTargetInLocation = assessTargetLocation(ability, activeBoardSlots, index)
+        if (!isTargetInLocation) {
+          return false
+        }
+        const isTargetSatisfied = assessTargetConditions(ability, dToon)
+        if (!isTargetSatisfied) {
+          return false
+        }
+        const countSatisfaction = assessAbilityConditions(ability, activeBoardSlots)
+        if (countSatisfaction === 0) { // or less than??
+          return false
+        }
+        return true
+      })
+
+      // override if it should be protected
+      return cardIsProtected ?
+        { ...dToon, cardStatus: { ...dToon.cardStatus, isProtected: true, isSilenced: false } } // the exception
+        : { ...dToon, cardStatus: { ...dToon.cardStatus, isProtected: false } }
+    })
+    console.log('protectedCards', protectedCards)
+    setBoardSlots(protectedCards)
+
+
+
 
 
 
@@ -136,7 +130,7 @@ function App() {
     // ! Score the board...
     setTimeout(() => {
 
-      const newScoringSlots = scoreTheBoard(silencedCards)
+      const newScoringSlots = scoreTheBoard(protectedCards)
       // console.log('newScoringSlots', newScoringSlots)
 
       // ! set scoring

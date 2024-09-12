@@ -1,7 +1,7 @@
 import locationTree from "../locationTree"
 
 // own imports for buckets and lists...
-const animalBucket = ['Bug', 'Dog', 'Lion', 'Bear', 'Gorilla', 'Meerekat', 'Warthog', 'Monkey']
+const animalBucket = ['Bird', 'Bug', 'Dog', 'Lion', 'Bear', 'Gorilla', 'Meerekat', 'Warthog', 'Monkey']
 const royaltyBucket = ['King', 'Queen', 'Prince', 'Princess']
 const bucketTree = {
     'Animal': animalBucket,

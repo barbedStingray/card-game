@@ -234,7 +234,27 @@ const dToons = [
         rarity: 'Common',
         movie: 'Tarzan',
         noToonImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725469887/dToons/Tarzan/JanePorter/janePorter_simpleImage.png',
-        abilities: [],
+        abilities: [
+            {
+                ability: 'Protects all Animal cards',
+                abilityOrigin: 'Jane Porter',
+                abilityType: 'PROTECT', // boardSet could be combined into this... abilityType !== 'SCORE'
+                // abilityUsed: false,
+
+                targets: { // not every target needs a condition. Targets are free.
+                    kind: 'Animal'
+                },
+                targetMatch: 'every',
+                targetLocation: 'INPLAY',
+
+                // self triggered by being played...
+                conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
+                    character: ['Jane Porter'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
+                },
+                conditionMatch: 'every', // or every // this means it can match some of the conditionCategories, or ALL
+                conditionLocation: 'SELF', // location check for conditions - Does this need to be an array?
+            },
+        ],
     },
     {
         id: 7,
