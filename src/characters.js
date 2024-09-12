@@ -103,18 +103,18 @@ const dToons = [
         noToonImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725469612/dToons/Aladdin/MagicCarpet/magicCarpet_simpleImage.png',
         abilities: [
             {
-                ability: 'Protects neighboring cards',
-                abilityOrigin: 'Magic Carpet',
-                abilityType: 'PROTECT', // boardSet could be combined into this... abilityType !== 'SCORE'
-                // abilityUsed: false,
+                ability: 'Silences opposing Card from Magic Carpet',
+                abilityType: 'SILENCE', // boardSet could be combined into this... abilityType !== 'SCORE'
+                abilityOrigin: 'Magic Carpet', 
 
+                // beenUsed: false, // this is not a one shot ability...
                 targets: { // not every target needs a condition. Targets are free.
-                    // color: 'Pink'
+                    // color: 'Orange'
                 },
                 targetMatch: 'every',
-                targetLocation: 'NEIGHBOR',
+                targetLocation: 'OPPOSITE',
 
-                // self triggered by being played...
+                // condition can be SELF if it triggers by being played...
                 conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
                     character: ['Magic Carpet'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
                 },

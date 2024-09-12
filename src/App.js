@@ -45,15 +45,18 @@ function App() {
 
 
     // apply silence FIRST
-    const activeSilenceAbilities = activeBoardSlots.filter((toon) => toon?.isActive === true && toon?.cardStatus.isSilenced === false)
+    const activeSilenceAbilities = activeBoardSlots.filter((toon) => toon?.isActive === true)
       .map((slot) => slot?.abilities).flat().filter((ability) => ability?.abilityType === 'SILENCE')
     console.log('activeSilenceAbilities', activeSilenceAbilities)
+
+    // todo split hairs at the top on which cards get silenced here...
 
     const silencedCards = activeBoardSlots.map((dToon, index) => {
       if (!dToon) return null
       if (activeSilenceAbilities.length === 0) return { ...dToon, cardStatus: { ...dToon.cardStatus, isSilenced: false } }
 
       const cardIsSilenced = activeSilenceAbilities.some((ability) => {
+        console.log('silence ability', dToon.character, ability.ability)
         const isTargetInLocation = assessTargetLocation(ability, activeBoardSlots, index)
         if (!isTargetInLocation) {
           return false
@@ -74,6 +77,9 @@ function App() {
     })
     console.log('silencedCards', silencedCards)
 
+
+
+    
     // maybe protected should be last, and make exceptions? 
     // apply protect SECOND, make exceptions...
     const activeProtectAbilities = silencedCards.filter((toon) => toon?.isActive === true && toon?.cardStatus.isSilenced === false)
@@ -110,7 +116,8 @@ function App() {
     setBoardSlots(protectedCards)
 
 
-
+    // set other board manuvers here based on if a card is protected or not???
+    // will protected cards change after this point? probably not...
 
 
 
