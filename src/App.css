@@ -164,13 +164,28 @@
 
 }
 
-
+.protect {
+  background-color: aqua;
+  border: 1px solid black;
+  z-index: 50;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+}
+.inactive {
+  background-color: grey;
+  border: 1px solid black;
+  z-index: 60;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+}
 
 .boardImage {
   height: 100%;
   width: 100%;
 }
 
-.active {
-  color: red;
+.pointBonus {
+  color: rgb(0, 255, 34);
 }

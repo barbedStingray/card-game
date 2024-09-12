@@ -25,10 +25,12 @@ const GameCard = ({ slot }) => {
             {slot ? (
                 <>
                     <div className='gameCard'>
+                        <div className={`${slot.isProtected ? 'protect' : 'not-protect'}`}></div>
+                        <div className={`${slot.isActive ? 'active' : 'inactive'}`}></div>
                         <div className='gameCard-imageMask' style={{ backgroundImage: `url(${slot.noToonImage})` }}></div>
                         <div className='gameCard-colorRing' style={{ background: toonColor }}></div>
                         <div className='gameCard-pointCircle'>
-                            <p className={`toonScore ${valueChange ? 'active' : 'inactive'}`}>
+                            <p className={`toonScore ${valueChange ? 'pointBonus' : 'no-pointBonus'}`}>
                                 {toonPoints}
                             </p>
                         </div>

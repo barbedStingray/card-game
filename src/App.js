@@ -7,6 +7,11 @@ import swapTheBoard from './utilities/swapTheBoard.js'
 import identifyInactiveCards from './utilities/identifyInactiveCards.js'
 import GameCard from './components/GameCard.jsx'
 
+import assessTargetLocation from './utilities/checkpoints/assessTargetLocation.js'
+import assessTargetConditions from './utilities/checkpoints/assessTargetConditions.js'
+import assessAbilityConditions from './utilities/checkpoints/assessAbilityConditions.js'
+
+
 function App() {
 
   const [gameCount, setGameCount] = useState(0)
@@ -32,16 +37,66 @@ function App() {
 
     // ! Identify active cards
     const activeBoardSlots = identifyInactiveCards(playCardSlots)
-    // console.log('activeBoardSlots', activeBoardSlots)
+    console.log('activeBoardSlots', activeBoardSlots)
     setBoardSlots(activeBoardSlots)
+    // todo remove card status' based on cards removed? 
+
+
+
+
 
 
     // ! swap the board
-    const newPositionBoardSlots = swapTheBoard(activeBoardSlots)
-    // console.log('newPositionBoardSlots', newPositionBoardSlots)
-    setTimeout(() => {
-      setBoardSlots(newPositionBoardSlots)
-    }, 1000);
+    // todo apply protect
+    const activeProtectAbilities = activeBoardSlots.filter((toon) => toon?.isActive === true).map((slot) => slot?.abilities)
+      .flat().filter((ability) => ability?.abilityType === 'PROTECT')
+    console.log('activeProtectAbilities', activeProtectAbilities)
+
+    const protectedCards = activeBoardSlots.map((dToon, index) => {
+      if (!dToon) return null
+      console.log('in protected cards', dToon.character)
+      if (activeProtectAbilities.length === 0) return { ...dToon, isProtected: false }
+
+      const cardIsProtected = activeProtectAbilities.every((ability) => {
+        // ! Check if dToon is inside target location
+        const isTargetInLocation = assessTargetLocation(ability, activeBoardSlots, index)
+        if (!isTargetInLocation) {
+          return false
+        }
+        // ! check if dToon meets target satisfaction (target conditions)
+        const isTargetSatisfied = assessTargetConditions(ability, dToon)
+        if (!isTargetSatisfied) {
+          return false
+        }
+        // ! check if the ability conditions are met
+        const countSatisfaction = assessAbilityConditions(ability, activeBoardSlots)
+        if (countSatisfaction === 0) { // or less than??
+          return false
+        }
+        return true
+      })
+      console.log('cardIsProtected', dToon.character, cardIsProtected)
+      // protect Logic...
+      return cardIsProtected ? { ...dToon, isProtected: true } : { ...dToon, isProtected: false }
+    })
+    console.log('protectedCards', protectedCards)
+
+
+
+
+
+
+
+    // ! swap the board OLD
+    const newPositionBoardSlots = swapTheBoard(protectedCards)
+    setBoardSlots(protectedCards)
+
+
+
+
+
+
+
 
 
     // ! Score the board...

@@ -5,7 +5,7 @@ export default function identifyInactiveCards(boardSlots) {
     const duplicateCharacters = newBoardSlots.map((slot) => slot?.character ?? []).filter((character, i, arr) => arr.indexOf(character) !== i)
     newBoardSlots.forEach((slot) => {
       if (duplicateCharacters.includes(slot?.character ?? null)) {
-        slot.active = false
+        slot.isActive = false
       }
     })
 

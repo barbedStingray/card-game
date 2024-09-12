@@ -19,7 +19,7 @@ const bucketTree = {
 
 export default function scoreTheBoard(boardSlots) {
     // console.log('scoring Board', boardSlots)
-    const activeInPlayBoardSlots = boardSlots.map((slot) => (slot?.active ?? false) ? slot : null)
+    const activeInPlayBoardSlots = boardSlots.map((slot) => (slot?.isActive ?? false) ? slot : null)
     // console.log('activeInPlayBoardSlots', activeInPlayBoardSlots)
 
 
@@ -55,12 +55,7 @@ export default function scoreTheBoard(boardSlots) {
 
             // ! check if the ability conditions are met
             const countSatisfaction = assessAbilityConditions(ability, activeInPlayBoardSlots)
-            // console.log('isConditionSatisfiedBySameCard', isConditionSatisfiedBySameCard)
-
-            // const countSatisfaction = isConditionSatisfiedBySameCard.filter(Boolean).length
             // console.log('countSatisfaction', countSatisfaction)
-            // const isConditionSatisfied = countSatisfaction > 0
-            // console.log('isConditionSatisfied', isConditionSatisfied)
 
             if (countSatisfaction === 0) { // or less than??
                 // console.log(ability.ability, 'condition not met')
