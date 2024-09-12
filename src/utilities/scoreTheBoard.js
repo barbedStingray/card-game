@@ -24,7 +24,7 @@ export default function scoreTheBoard(boardSlots) {
 
 
     const allScoringAbilities = activeInPlayBoardSlots.map((toon) => toon?.abilities ?? []).flat()
-        .filter((ability) => ability.abilityType === 'SCORE' && ability.abilityInPlay === true) // make sure it hasent been silenced
+        .filter((ability) => ability.abilityType === 'SCORE') // make sure it hasent been silenced
     // console.log('allScoringAbilities', allScoringAbilities)
 
     // ! INITIAL go over each dToon one by one // I want an array of toons with adjusted points
@@ -33,9 +33,14 @@ export default function scoreTheBoard(boardSlots) {
         if (!dToon) return null
         const dToonIndex = index
 
-        // ! loop through each ability in play (this is inside each dToon)
         const additionalPoints = allScoringAbilities.reduce((abilityTotal, ability) => {
             // console.log('looping through Abilities:', ability.ability)
+
+            // todo if ability is silenced, return abilityTotal... ??
+            if (dToon.cardStatus.isSilenced) {
+                console.log('SILENCE', ability.ability)
+                return abilityTotal
+            } 
 
             // ! Check if dToon is inside target location
             const isTargetInLocation = assessTargetLocation(ability, activeInPlayBoardSlots, dToonIndex)
@@ -43,7 +48,6 @@ export default function scoreTheBoard(boardSlots) {
                 // console.log(dToon.character, 'is not in Target Location', ability.ability)
                 return abilityTotal
             }
-
             // ! check if dToon meets target satisfaction (target conditions)
             const isTargetSatisfied = assessTargetConditions(ability, dToon)
             // console.log('isTargetSatisfied?', isTargetSatisfied)
@@ -51,12 +55,9 @@ export default function scoreTheBoard(boardSlots) {
                 // console.log(dToon.character, 'is not a target of', ability.ability)
                 return abilityTotal
             }
-
-
             // ! check if the ability conditions are met
             const countSatisfaction = assessAbilityConditions(ability, activeInPlayBoardSlots)
             // console.log('countSatisfaction', countSatisfaction)
-
             if (countSatisfaction === 0) { // or less than??
                 // console.log(ability.ability, 'condition not met')
                 return abilityTotal
@@ -64,8 +65,14 @@ export default function scoreTheBoard(boardSlots) {
 
             // ! Checks all passed, apply bonus
             const { oneShot, bonus } = ability
+            const isNegative = Number(bonus) < 0
             const isMultiplier = bonus.split('').some((letter) => letter === 'x')
             const newBonus = isMultiplier ? dToon.points * Number(bonus[0]) : Number(bonus)
+            
+            if (dToon.cardStatus.isProtected && isNegative) {
+                console.log(dToon.character, 'is protected from negatives')
+                return abilityTotal
+            }
             return (oneShot ? newBonus : newBonus * countSatisfaction) + abilityTotal
         }, 0)
 

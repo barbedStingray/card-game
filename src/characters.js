@@ -8,7 +8,10 @@ const dToons = [
     {
         id: 10,
         isActive: true,
-        isProtected: false,
+        cardStatus: {},
+        //     isProtected: false,
+        //     // other status effects here
+        // },
         cardTitle: 'Scuttles Dinglehopper',
         character: 'Scuttle',
         color: 'Orange',
@@ -25,7 +28,6 @@ const dToons = [
             {
                 ability: '+3 for each Black card in play',
                 abilityType: 'SCORE',
-                abilityInPlay: true,
                 abilityOrigin: 'Scuttle', // origin position of the ability - determines neighbors / locations... 
 
                 targets: { // not every target needs a condition. Targets are free.
@@ -48,7 +50,7 @@ const dToons = [
     {
         id: 11,
         isActive: true,
-        isProtected: false,
+        cardStatus: {},
         cardTitle: 'Hooks Revenge',
         character: 'Captain Hook',
         color: 'Black',
@@ -62,32 +64,31 @@ const dToons = [
         movie: 'Peter Pan',
         noToonImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725467792/dToons/PeterPan/CaptainHook/captainHook_simpleImage.png',
         abilities: [
-            // {
-            //     ability: 'Silences opposing Orange Card',
-            //     abilityType: 'SILENCE', // boardSet could be combined into this... abilityType !== 'SCORE'
-            //     abilityInPlay: true,
-            //     abilityOrigin: 'Captain Hook', 
+            {
+                ability: 'Silences opposing Card from Hook',
+                abilityType: 'SILENCE', // boardSet could be combined into this... abilityType !== 'SCORE'
+                abilityOrigin: 'Captain Hook', 
 
-            //     // beenUsed: false, // this is not a one shot ability...
-            //     targets: { // not every target needs a condition. Targets are free.
-            //         color: 'Orange'
-            //     },
-            //     targetMatch: 'every',
-            //     targetLocation: 'OPPOSITE',
+                // beenUsed: false, // this is not a one shot ability...
+                targets: { // not every target needs a condition. Targets are free.
+                    // color: 'Orange'
+                },
+                targetMatch: 'every',
+                targetLocation: 'OPPOSITE',
 
-            //     // condition can be SELF if it triggers by being played...
-            //     conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
-            //         character: ['Captain Hook'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
-            //     },
-            //     conditionMatch: 'every', // or every // this means it can match some of the conditionCategories, or ALL
-            //     conditionLocation: 'SELF', // location check for conditions - Does this need to be an array?
-            // },
+                // condition can be SELF if it triggers by being played...
+                conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
+                    character: ['Captain Hook'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
+                },
+                conditionMatch: 'every', // or every // this means it can match some of the conditionCategories, or ALL
+                conditionLocation: 'SELF', // location check for conditions - Does this need to be an array?
+            },
         ],
     },
     {
         id: 4,
         isActive: true,
-        isProtected: false,
+        cardStatus: {},
         cardTitle: 'Quick Escape',
         character: 'Magic Carpet',
         color: 'Yellow',
@@ -102,17 +103,16 @@ const dToons = [
         noToonImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725469612/dToons/Aladdin/MagicCarpet/magicCarpet_simpleImage.png',
         abilities: [
             {
-                ability: 'Protects all black cards',
+                ability: 'Protects neighboring cards',
                 abilityOrigin: 'Magic Carpet',
                 abilityType: 'PROTECT', // boardSet could be combined into this... abilityType !== 'SCORE'
-                abilityInPlay: true,
                 // abilityUsed: false,
 
                 targets: { // not every target needs a condition. Targets are free.
-                    color: 'Black'
+                    // color: 'Pink'
                 },
                 targetMatch: 'every',
-                targetLocation: 'INPLAY',
+                targetLocation: 'NEIGHBOR',
 
                 // self triggered by being played...
                 conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
@@ -126,7 +126,7 @@ const dToons = [
     {
         id: 5,
         isActive: true,
-        isProtected: false,
+        cardStatus: {},
         cardTitle: 'Poor Souls',
         character: 'Ursula',
         color: 'Black',
@@ -139,12 +139,32 @@ const dToons = [
         rarity: 'Rare',
         movie: 'The Little Mermaid',
         noToonImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725468189/dToons/theLittleMermaid/Ursula/ursula_simpleImage.png',
-        abilities: [],
+        abilities: [
+            {
+                ability: 'Silences opposing Card from Ursula',
+                abilityType: 'SILENCE', // boardSet could be combined into this... abilityType !== 'SCORE'
+                abilityOrigin: 'Ursula', 
+
+                // beenUsed: false, // this is not a one shot ability...
+                targets: { // not every target needs a condition. Targets are free.
+                    // color: 'Orange'
+                },
+                targetMatch: 'every',
+                targetLocation: 'OPPOSITE',
+
+                // condition can be SELF if it triggers by being played...
+                conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
+                    character: ['Ursula'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
+                },
+                conditionMatch: 'every', // or every // this means it can match some of the conditionCategories, or ALL
+                conditionLocation: 'SELF', // location check for conditions - Does this need to be an array?
+            },
+        ],
     },
     {
         id: 12,
         isActive: true,
-        isProtected: false,
+        cardStatus: {},
         cardTitle: 'Whistle While You Work',
         character: 'Snow White',
         color: 'Pink',
@@ -157,33 +177,12 @@ const dToons = [
         rarity: 'Rare',
         movie: 'Snow White',
         noToonImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725469443/dToons/SnowWhite/SnowWhite/snowWhite_simpleImage.png',
-        abilities: [
-            // {
-            //     ability: 'Silences opposing Cards',
-            //     abilityType: 'SILENCE', // boardSet could be combined into this... abilityType !== 'SCORE'
-            //     abilityInPlay: true,
-            //     abilityOrigin: 'Snow White', 
-
-            //     // beenUsed: false, // this is not a one shot ability...
-            //     targets: { // not every target needs a condition. Targets are free.
-            //         // color: 'Orange'
-            //     },
-            //     targetMatch: 'every',
-            //     targetLocation: 'OPPONENT',
-
-            //     // condition can be SELF if it triggers by being played...
-            //     conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
-            //         character: ['Snow White'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
-            //     },
-            //     conditionMatch: 'every', // or every // this means it can match some of the conditionCategories, or ALL
-            //     conditionLocation: 'SELF', // location check for conditions - Does this need to be an array?
-            // },
-        ],
+        abilities: [],
     },
     {
         id: 3,
         isActive: true,
-        isProtected: false,
+        cardStatus: {},
         cardTitle: 'Ultimate Cosmic Power',
         character: 'Jafar',
         color: 'Black',
@@ -200,7 +199,6 @@ const dToons = [
             {
                 ability: '-5 to the Opposing card if Princess',
                 abilityType: 'SCORE',
-                abilityInPlay: true,
                 abilityOrigin: 'Jafar', // origin position of the ability - determines neighbors / locations... 
 
                 targets: { // not every target needs a condition. Targets are free.
@@ -223,7 +221,7 @@ const dToons = [
     {
         id: 6,
         isActive: true,
-        isProtected: false,
+        cardStatus: {},
         cardTitle: 'What about the Monkeys?',
         character: 'Jane Porter',
         color: 'White',
@@ -241,7 +239,7 @@ const dToons = [
     {
         id: 7,
         isActive: true,
-        isProtected: false,
+        cardStatus: {},
         cardTitle: 'Saving a Spot',
         character: 'Yzma',
         color: 'Black',
@@ -258,7 +256,6 @@ const dToons = [
             {
                 ability: '+5 if this card is played last',
                 abilityType: 'SCORE',
-                abilityInPlay: true,
                 abilityOrigin: 'Yzma', // origin position of the ability - determines neighbors / locations... 
 
                 targets: { // not every target needs a condition. Targets are free.

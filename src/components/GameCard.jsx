@@ -25,7 +25,8 @@ const GameCard = ({ slot }) => {
             {slot ? (
                 <>
                     <div className='gameCard'>
-                        <div className={`${slot.isProtected ? 'protect' : 'not-protect'}`}></div>
+                        <div className={`${slot.cardStatus.isSilenced ? 'silence' : 'not-silence'}`}></div>
+                        <div className={`${slot.cardStatus.isProtected ? 'protect' : 'not-protect'}`}></div>
                         <div className={`${slot.isActive ? 'active' : 'inactive'}`}></div>
                         <div className='gameCard-imageMask' style={{ backgroundImage: `url(${slot.noToonImage})` }}></div>
                         <div className='gameCard-colorRing' style={{ background: toonColor }}></div>

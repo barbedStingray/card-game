@@ -172,6 +172,18 @@
   width: 30px;
   height: 30px;
 }
+.silence {
+  background-color: rgb(198, 235, 255);
+  border: 1px solid black;
+  z-index: 60;
+  position: absolute;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  top: 60%;
+  left: 60%;
+
+}
 .inactive {
   background-color: grey;
   border: 1px solid black;
