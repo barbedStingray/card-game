@@ -2,7 +2,7 @@
 
 const abilityOne =
 {
-    ability: '+3 for each Black card in play',
+    ability: '+X for each COLOR card in play',
     abilityType: 'SCORE',
     abilityOrigin: 'Scuttle', // origin position of the ability - determines neighbors / locations... 
 

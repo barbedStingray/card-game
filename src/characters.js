@@ -9,9 +9,6 @@ const dToons = [
         id: 10,
         isActive: true,
         cardStatus: {},
-        //     isProtected: false,
-        //     // other status effects here
-        // },
         cardTitle: 'Scuttles Dinglehopper',
         character: 'Scuttle',
         color: 'Orange',
@@ -65,23 +62,21 @@ const dToons = [
         noToonImage: 'https://res.cloudinary.com/dzh1qe1zp/image/upload/v1725467792/dToons/PeterPan/CaptainHook/captainHook_simpleImage.png',
         abilities: [
             {
-                ability: 'Silences opposing Card from Hook',
-                abilityType: 'SILENCE', // boardSet could be combined into this... abilityType !== 'SCORE'
+                ability: 'Copies the opposite cards ability',
+                abilityType: 'COPY', 
                 abilityOrigin: 'Captain Hook', 
 
-                // beenUsed: false, // this is not a one shot ability...
-                targets: { // not every target needs a condition. Targets are free.
+                targets: { 
                     // color: 'Orange'
                 },
                 targetMatch: 'every',
                 targetLocation: 'OPPOSITE',
 
-                // condition can be SELF if it triggers by being played...
-                conditions: { // represents both conditionCategories and conditions // Every card HAS to have a condition. no free points.
-                    character: ['Captain Hook'], // bucket keyword matches the characteristic of the dToon... Royalty => Group : Animal => Kind
+                conditions: { 
+                    character: ['Captain Hook'], 
                 },
-                conditionMatch: 'every', // or every // this means it can match some of the conditionCategories, or ALL
-                conditionLocation: 'SELF', // location check for conditions - Does this need to be an array?
+                conditionMatch: 'every', 
+                conditionLocation: 'SELF', 
             },
         ],
     },

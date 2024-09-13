@@ -39,7 +39,6 @@ function App() {
     const activeBoardSlots = identifyInactiveCards(playCardSlots)
     console.log('activeBoardSlots', activeBoardSlots)
     setBoardSlots(activeBoardSlots)
-    // todo remove card status' based on cards removed? 
 
 
 
@@ -47,16 +46,12 @@ function App() {
     // apply silence FIRST
     const activeSilenceAbilities = activeBoardSlots.filter((toon) => toon?.isActive === true)
       .map((slot) => slot?.abilities).flat().filter((ability) => ability?.abilityType === 'SILENCE')
-    console.log('activeSilenceAbilities', activeSilenceAbilities)
-
-    // todo split hairs at the top on which cards get silenced here...
 
     const silencedCards = activeBoardSlots.map((dToon, index) => {
       if (!dToon) return null
       if (activeSilenceAbilities.length === 0) return { ...dToon, cardStatus: { ...dToon.cardStatus, isSilenced: false } }
 
       const cardIsSilenced = activeSilenceAbilities.some((ability) => {
-        console.log('silence ability', dToon.character, ability.ability)
         const isTargetInLocation = assessTargetLocation(ability, activeBoardSlots, index)
         if (!isTargetInLocation) {
           return false
@@ -75,24 +70,16 @@ function App() {
         { ...dToon, cardStatus: { ...dToon.cardStatus, isSilenced: true } }
         : { ...dToon, cardStatus: { ...dToon.cardStatus, isSilenced: false } }
     })
-    console.log('silencedCards', silencedCards)
 
-
-
-    
-    // maybe protected should be last, and make exceptions? 
     // apply protect SECOND, make exceptions...
     const activeProtectAbilities = silencedCards.filter((toon) => toon?.isActive === true && toon?.cardStatus.isSilenced === false)
       .map((slot) => slot?.abilities).flat().filter((ability) => ability?.abilityType === 'PROTECT')
-    // console.log('activeProtectAbilities', activeProtectAbilities)
-
     const protectedCards = silencedCards.map((dToon, index) => {
       if (!dToon) return null
       if (activeProtectAbilities.length === 0) return { ...dToon, cardStatus: { ...dToon.cardStatus, isProtected: false } }
 
       const cardIsProtected = activeProtectAbilities.some((ability) => {
-        // console.log(dToon.character, 'checking conditions', ability.ability)
-        const isTargetInLocation = assessTargetLocation(ability, activeBoardSlots, index)
+        const isTargetInLocation = assessTargetLocation(ability, silencedCards, index)
         if (!isTargetInLocation) {
           return false
         }
@@ -100,19 +87,17 @@ function App() {
         if (!isTargetSatisfied) {
           return false
         }
-        const countSatisfaction = assessAbilityConditions(ability, activeBoardSlots)
+        const countSatisfaction = assessAbilityConditions(ability, silencedCards)
         if (countSatisfaction === 0) { // or less than??
           return false
         }
         return true
       })
-
       // override if it should be protected
       return cardIsProtected ?
         { ...dToon, cardStatus: { ...dToon.cardStatus, isProtected: true, isSilenced: false } } // the exception
         : { ...dToon, cardStatus: { ...dToon.cardStatus, isProtected: false } }
     })
-    console.log('protectedCards', protectedCards)
     setBoardSlots(protectedCards)
 
 
@@ -120,8 +105,45 @@ function App() {
     // will protected cards change after this point? probably not...
 
 
+    // copy an ability... abilities??
+
+    // const copiedCards = protectedCards.map((dToon, index) => {
+    //   // loop through all toons to see if they have a copy ability...
+    //   if (!dToon) return null
+    //   if (dToon.cardStatus.isSilenced) {
+    //     console.log('copy - toon is silenced', dToon.character)
+    //     return dToon
+    //   }
+    //   // check if toon has a copy ability...
+    //   const toonCopyAbility = dToon.abilities.filter((ability) => ability.abilityType === 'COPY')
+    //   console.log('toonCopyAbility', toonCopyAbility)
+    //   if (toonCopyAbility.length === 0) return dToon // if it has no copy ability
 
 
+    //   const targetCopyCard = toonCopyAbility.some((ability) => {
+    //     console.log(ability.ability)
+    //     const isTargetInLocation = assessTargetLocation(ability, protectedCards, index)
+    //     console.log('isTargetInLocation', isTargetInLocation)
+    //     if (!isTargetInLocation) {
+    //       return false
+    //     }
+    //     const isTargetSatisfied = assessTargetConditions(ability, dToon)
+    //     if (!isTargetSatisfied) {
+    //       return false
+    //     }
+    //     const countSatisfaction = assessAbilityConditions(ability, protectedCards)
+    //     if (countSatisfaction === 0) { // or less than??
+    //       return false
+    //     }
+    //     return true
+    //   })
+    //   console.log('targetCopyCard', targetCopyCard)
+
+
+
+    //   return dToon
+    // })
+    // console.log('copiedCards', copiedCards)
 
 
 
